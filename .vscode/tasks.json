@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build and run cpp",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "g++ -std=c++17 \"${file}\" -o \"${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe\" && \"${workspaceFolder}\\bin\\${fileBasenameNoExtension}.exe\" < \"${workspaceFolder}\\src\\input.txt\" > \"${workspaceFolder}\\src\\output.txt\""
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        }
+    ]
+}
