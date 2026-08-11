@@ -1,13 +1,16 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//also solve leetcode 525  IMP..
+
+//two pointer and also hashing for better
 vector<int> twoSum(vector<int> &nums, int target){
     
     //Optimal Solution-> 2 pointer approach
     //this solution is used when we need to return yes or no and not the index of the values.
     //here i am taking 1 for yes and 0 for no. as we must return int.
     int left=0,right=nums.size()-1;
-    sort(nums.begin(),nums.end());
+    sort(nums.begin(),nums.end());//due to sort we cant return indx
     while(left<right){
         int sum=nums[left]+nums[right];
         if(sum==target){
@@ -46,9 +49,9 @@ vector<int> twoSum(vector<int> &nums, int target){
 
 }
 
+//Dutch national flag algorithm..
 vector<int> sortarrayof0_1_2(vector<int> &arr){
     //Dutch national flag algorithm..
-
     //optimal solution->
     int n=arr.size()-1;
     int low=0,mid=0,high=n;
@@ -71,6 +74,7 @@ vector<int> sortarrayof0_1_2(vector<int> &arr){
     //taking 3 valrable to the count the 0,1,2 in array. and creating new array from this count
 }
 
+//Boyer–Moore Voting Algorithm
 int MajorityElement(vector<int> arr){
 
     //optimal solution-> Moore's voting Algorithm
@@ -112,13 +116,15 @@ int MajorityElement(vector<int> arr){
     // return -1;
 }
 
+// easy but i dont got the idea in first time.like maxconsecutive ones in easy array file.
+//this method for solving is known Kadane's algorithm.
 int MaxSubarraySum(vector<int> arr){
       
     //Optimal Solution--> Kadane's Algorithm
     int sum=0;
     int maxi=INT_MIN;
     for(int i=0;i<arr.size();i++){
-        //int start=-1,ansstart=-1,ansend=-1;
+        //int start=-1,ansstart=-1,ansend=-1; //for printing the subarray,we will store the start and end array and then use onother for loop to print the subarray
         //if(sum==0) start=i;
         sum=sum+arr[i];
         if(sum>maxi){
@@ -152,7 +158,8 @@ int Besttimetobuyandsellstock(vector<int> arr){
     }
     return profit;
 
-
+    //alternate method start from back to front but consider maxi instead of mini
+    //keep idea of max element from back and use it to subtract and compare by each number as you move to the front.
 }   
 
 vector<int> Rearrangearrayelementsbysign(vector<int> &arr){
@@ -214,11 +221,17 @@ vector<int> Rearrangearrayelementsbysign(vector<int> &arr){
     //make two array of n/2 to store positive and negative elements seprately. 
 }
 
+// 
 void nextpermutation(vector<int> &arr){
 
     // //using stl
     // next_permutation(arr.begin(),arr.end());
+    
+    // void nextPermutation(vector<int>& nums) {
+    //     next_permutation(nums.begin(), nums.end());
+    // }
 
+    //optimal approach->
     //without using the built in function
     int ind=-1;
     int n=arr.size();
@@ -230,8 +243,9 @@ void nextpermutation(vector<int> &arr){
     }
     if(ind==-1){
         reverse(arr.begin(),arr.end());
+        return;
     }
-    for(int i=n-1;i>ind;i++){
+    for(int i=n-1;i>ind;i--){
         if(arr[i]>arr[ind]){
             swap(arr[i],arr[ind]);
             break;
@@ -256,6 +270,7 @@ vector<int> LeadersinanArray(vector<int> arr){
     return ans;
 }
 
+//
 int longestConsecutiveSequence(vector<int> &a){
     
     //Optimal solution->
@@ -281,6 +296,7 @@ int longestConsecutiveSequence(vector<int> &a){
 
 
     // //Better solution->//we will sort the array.
+    //kind of kadane algo
     // if(a.size()==0) return 0;
     // sort(a.begin(),a.end());
     // int n=a.size();
@@ -292,7 +308,7 @@ int longestConsecutiveSequence(vector<int> &a){
     //         cnt+=1;
     //         lastsamaller=a[i];
     //     }
-    //     else if(lastsamaller!=a[i]){
+    //     else if(lastsamaller!=a[i]){//this condition is because there can be repeat numbers in array .
     //         cnt=1;
     //         lastsamaller=a[i];
     //     }
@@ -301,9 +317,10 @@ int longestConsecutiveSequence(vector<int> &a){
     // return longest;
 }
 
+//
 vector<vector<int>> SetZeroMatrix(vector<vector<int>> &matrix,int n,int m){
     
-    //Optimal Solution->
+    //Optimal Solution->//watch codestorywithmik video for easy code to understand
     int col0=1;
     for(int i=0;i<n;i++){
         for(int j=0;j<m;j++){
@@ -316,7 +333,7 @@ vector<vector<int>> SetZeroMatrix(vector<vector<int>> &matrix,int n,int m){
             }
         }
     }
-    for(int i=1;i<n;i++){
+    for(int i=1;i<n;i++){//not starting from first coloum or first row  (IMP) to douge karna hai corner case.
         for(int j=1;j<m;j++){
             if(matrix[i][j]!=0){
                 //check for col & row
@@ -358,6 +375,7 @@ vector<vector<int>> SetZeroMatrix(vector<vector<int>> &matrix,int n,int m){
     // return matrix;
 }
 
+//used first row and first col as marker..
 vector<vector<int>> RotateMatrix90(vector<vector<int>> &matrix){
     
     //Optimal Solution->
@@ -383,6 +401,7 @@ vector<vector<int>> RotateMatrix90(vector<vector<int>> &matrix){
     //new matrix bana ke arr[j][n-i-1]=arr[i][j];
 }
 
+//using 4 different variable as top,bottom,left,right...
 vector<int> SpiralMatrix(vector<vector<int>> matrix){
     //we will move in a way like
     //lefttop->righttop, righttop+1->rightbottom
@@ -500,10 +519,12 @@ int main(){
     // }
 
 
-    vector<int> vecarr={1,2,3,-3,1,1,1,4,2,-3};
-    cout<<findAllSubarraywithgivenSum(vecarr,3);
+    // vector<int> vecarr={1,2,3,-3,1,1,1,4,2,-3};
+    // cout<<findAllSubarraywithgivenSum(vecarr,3);
 
 
-    
+
+
+
     return 0;
 }

@@ -87,6 +87,9 @@ void reverse(vector<int> &arr,int start,int end){
         end--;
     }
 }
+//https://www.youtube.com/watch?v=JcoYAYFEX-w
+//watch this video to get the concept also se how to find the row and col of the array index in matrix.
+// used reverse tech
 void leftrotatebyDplaces(vector<int> &arr,int n,int d){
 
     //Optimal Solution--> time complexity increase to 2N but space complexity decreases
@@ -126,6 +129,7 @@ void leftrotatebyDplaces(vector<int> &arr,int n,int d){
    
 }
 
+// solved in O(2n)
 vector<int> moveallzerotoend(vector<int> &arr,int n){
     int j=-1;
     for(int i=0;i<n;i++){
@@ -142,6 +146,11 @@ vector<int> moveallzerotoend(vector<int> &arr,int n){
         }
     }
     return arr;
+
+    //my idea->
+    // for{  //this will get O(n^2)
+    //     while(!=0)
+    // }
 }
 
 int linearsearch(vector<int> arr,int num,int n){
@@ -153,6 +162,7 @@ int linearsearch(vector<int> arr,int num,int n){
     return -1;
 }
 
+//conditions are imp
 vector<int> unionofsortedarray(vector<int>a,vector<int>b){
     
     //Optimal-->
@@ -160,10 +170,10 @@ vector<int> unionofsortedarray(vector<int>a,vector<int>b){
     int n2=b.size();
     int i=0;
     int j=0;
-    vector<int> unionArr;
+    vector<int> unionArr;//we can even use set to avoid repeat value directly.
     while(i<n1 && j<n2){
         if(a[i]<=b[j]){
-            if(unionArr.size()==0||unionArr.back()!=a[i]){
+            if(unionArr.size()==0||unionArr.back()!=a[i]){//this back condition avoid repeat element
                 unionArr.push_back(a[i]);
             }
             i++;
@@ -234,7 +244,7 @@ int findmissingnumber(vector<int> arr,int N){
     //Method 1-->using xor.
     //xor of two same number is = 0.(n^n)=0
     //and xor of 0^number=number
-    //this is teh most optimal solution for this problem
+    //this is the most optimal solution for this problem
     int xor1=0,xor2=0;
     int n=N-1;
     for(int i=0;i<n;i++){
@@ -263,6 +273,7 @@ int findmissingnumber(vector<int> arr,int N){
 
 }
 
+//not my first thought
 int maxconsecuteones(vector<int> arr,int n){
     int count=0;
     int maxi=0;
@@ -278,6 +289,7 @@ int maxconsecuteones(vector<int> arr,int n){
     return maxi;
 }
 
+//using XOR
 int findthenumberthatappearsonce(vector<int> arr){
     //Brute Force->O(n^2) checking for each element in array
     //better->O(3n) one for finding max element used to define hash size,second for hashing,third for finding from hash array
@@ -292,6 +304,7 @@ int findthenumberthatappearsonce(vector<int> arr){
     return ans;
 }
 
+//using window method,hashing concept
 int longestsubarraywithsumK(vector<int> arr,long long k){
    
     // //Optimal solution-->
@@ -300,7 +313,7 @@ int longestsubarraywithsumK(vector<int> arr,long long k){
     // int maxLen=0;
     // int n=arr.size();
     // while(right<n){
-    //     while(left<=right && sum>k){
+    //     while(left<=right && sum>k){//used to skip multiple if for upper whil loop
     //         sum-=arr[left];
     //         left++;
     //     }
@@ -325,7 +338,7 @@ int longestsubarraywithsumK(vector<int> arr,long long k){
             maxLen=max(maxLen,i+1);
         }
         long long rem=sum-k;
-        if(preSumMap.find(rem) != preSumMap.end()){
+        if(preSumMap.find(rem) != preSumMap.end()){//O(log n) as it is ordered map, if we use unordered map(o(1))but the worst case can be O(n)
             int len=i-preSumMap[rem];
             maxLen=max(maxLen,len);
         }

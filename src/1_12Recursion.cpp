@@ -4,6 +4,14 @@ using namespace std;
 /*Recursion->When a function calls
 itself until a specified condition is met.*/
 
+// //IMP->euclidian algorithm.
+// int GCD(int a,int b){
+//     if(b==0){
+//         return a;
+//     }
+//     return GCD(b,a%b);
+// }
+
 int cnt0=0;
 void recursion1(){//simple recursion example
     if(cnt0==3) return;//Base condition

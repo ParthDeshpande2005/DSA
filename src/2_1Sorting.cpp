@@ -3,9 +3,9 @@ using namespace std;
 
 void Selection_Sort(int arr[],int n){
     //select minium and swap
-    for(int i=0;i<=n-2;i++){
+    for(int i=0;i<n-1;i++){
         int mini=i;
-        for(int j=i;j<=n-1;j++){
+        for(int j=i;j<n;j++){
             if(arr[j]<arr[mini]){
                 mini=j;
             }
@@ -113,7 +113,7 @@ int Partitionele(vector<int> &arr,int low,int high){
 void Quick_Sort(vector<int> &arr,int low,int high){
     //Pick a Pivot element and place it its correct place in the sorted array.
     //smaller on the left and larger on the right.
-    //divide and conquer Algor ithm
+    //divide and conquer Algorithm
     if(low<high){
         int PIndex=Partitionele(arr,low,high);
         Quick_Sort(arr,low,PIndex-1);

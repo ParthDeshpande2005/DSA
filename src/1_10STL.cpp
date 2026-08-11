@@ -22,7 +22,7 @@ void explainVector(){
 
     vec1.push_back(1);//push_back and emplace back both are used to add value at end.
     vec1.emplace_back(2);//emplace back is faster than push_back.
-    //{}->{1}due to push_back->{1,2}due to implace_back.
+    //{}->{1}due to push_back->{1,2}due to emplace_back.
 
     vector<pair<int,int>> pairvec;//declaring pair vector
 
@@ -85,7 +85,7 @@ void explainVector(){
         // v.erase(v.begin()+1);//{10,12,34}
 
         //{10,23,12,23,35}
-        // v.erase(v.begin()+2,v.begin()+4);//{10,20,35}
+        // v.erase(v.begin()+2,v.begin()+4);//{10,20,34}
     
     //Insert 
 
@@ -361,7 +361,6 @@ bool comp(pair<int,int>p1,pair<int,int>p2){
     }
     return false;
 }
-
 void Algorithms(){
 
     //Sorting
@@ -413,7 +412,9 @@ void Algorithms(){
         cout<<endl;
     
     //Next Permutation-->used to print all permutations of strings.
-    
+    //rearranges numbers into the next lexicographically greater permutation
+    //if not possible, rearranges into the lowest possible order (sorted ascending)
+    //we alsso have prev_permutation in cpp
         string s="123";//start matter karta hai kyu ki increasing order mai print hota hai.
 
         do{
@@ -421,6 +422,7 @@ void Algorithms(){
         }
         while(next_permutation(s.begin(),s.end()));
 
+    //IMP
     //*max_element
     int maxi=*max_element(arr,arr+n);//find max element in array
     cout<<maxi;

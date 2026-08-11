@@ -5,6 +5,7 @@ int main(){
     int i=1;
     while(i<=5){
         cout<<"parth"<<i<<endl;
+        //base condition->
         i=i+1;//imp or we get stuck in infinite loop.
     }
 
