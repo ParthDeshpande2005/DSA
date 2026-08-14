@@ -40,7 +40,7 @@ void Bubble_Sort(int arr[],int n){
 
 
 void Insertion_Sort(int arr[],int n){
-    //Takes an element and place it in correct order.
+    //you take an element and insert it into allready sorted left portion.
     for(int i=0;i<n;i++){//har bar arr[i] jitna part sort ho raha hai.first time 1 element fir 2 fir 3 and so on
         int j=i;
         while(j>0 && arr[j-1]>arr[j]){

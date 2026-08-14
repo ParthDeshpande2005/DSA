@@ -75,7 +75,6 @@ bool canJump(vector<int>& nums) {
 }
 
 
-
 //IMP-->
 int minNumberofplatform(vector<int> &arrival, vector<int>& depart){
     
@@ -124,6 +123,115 @@ int minNumberofplatform(vector<int> &arrival, vector<int>& depart){
 }
 
 
+//Job Sequencing Problem-->
+// every job requires 1 day to complete it .
+// need to maximize the profit.
+// there is deadline associated with each job.
+bool cmp2(vector<int>&a ,vector<int> &b){
+    return a[2]>b[2];
+}
+//TC-O(NlogN+ N*maxdeadline) SC-O(maxdeadline)
+pair<int,int> jobsequencing(vector<vector<int>>&jobs){
+    //we need to sort the arr according to profit.
+    sort(jobs.begin(),jobs.end(),cmp2); //n log n
+
+    // we try to maximize each day.
+    // we create the hash array of size max deadline.
+    int n=jobs.size();
+    int maxdeadline=-1;
+    for(int i=0;i<n;i++){ //n
+        maxdeadline=max(maxdeadline,jobs[i][1]);
+    }
+    vector<int> hasharr(maxdeadline+1,-1);
+
+    int cnt=0;
+    int maxprofit=0;
+    for(int i=0;i<n;i++){ //n
+        for(int j=jobs[i][1];j>=0;j--){ // max deadline
+            if(hasharr[j]==-1){
+                cnt+=1;
+                maxprofit+=jobs[i][2];
+                hasharr[j]=jobs[i][0];// we will store the index in the hasharr
+                break;
+            }
+        }
+    }
+    return {maxprofit,cnt};
+
+}
+
+
+//leetcode 135--> using slope appoarch....IMP
+int candy(vector<int>& ratings) {
+    int n=ratings.size();
+    int sum=1;
+    int i=1;
+
+    while(i<n){
+        if(ratings[i]==ratings[i-1]){
+            sum+=1;
+            i++;
+            continue;
+        }
+        int peak=1;
+        while(i<n && ratings[i]>ratings[i-1]){
+            peak+=1;
+            sum+=peak;
+            i++;
+        }
+        int down=1;
+        while(i<n && ratings[i]<ratings[i-1]){
+            sum+=down;
+            down+=1;
+            i++;
+        }
+        if(down>peak) sum+=down-peak;
+    }
+    return sum;
+
+
+    // //using 2 for loop one 0->n  and then n->0 
+    // int n=ratings.size();
+    // vector<int> cnt(n,1);
+    // for(int i=1;i<n;i++){
+    //     if(ratings[i]>ratings[i-1]){
+    //         cnt[i]=cnt[i-1]+1;
+    //         cout<<cnt[i]<<" ";
+    //     }
+    // }
+    // for(int j=n-2;j>=0;j--){
+    //     if(ratings[j]>ratings[j+1]){
+    //         if(cnt[j]<=cnt[j+1]){
+    //             cnt[j]=cnt[j+1]+1;
+    //             cout<<cnt[j]<<" ";
+    //         }
+    //     }
+    // }
+    // int ans=accumulate(cnt.begin(),cnt.end(),0);
+    
+    // return ans;
+}
+
+
+//Shortest job first..
+//scheduling policy that selects the waiting process with the smallest execution time to execute next.
+int sjf(vector<int> jobs){
+    //need to return the avg of the wating time for executing 
+    sort(jobs.begin(),jobs.end());
+    int waittime=0;
+    int t=0;
+    int n=jobs.size();
+    for(int i=0;i<n;i++){
+        waittime+=t;
+        t+=jobs[i];
+    }
+    return waittime/n;
+}
+
+
+
+
+
 
 int main(){
 
@@ -151,6 +259,23 @@ int main(){
     vector<int> arrival={900,945,955,1100,1500,1800};
     vector<int> depart={920,1200,1130,1150,1900,2000};
     cout<<minNumberofplatform(arrival,depart);
+    cout<<endl<<endl;
+
+
+    // id, deadline,profit in vector
+    vector<vector<int>> jobs={{1,4,20},{2,5,60},{3,6,70},{4,6,65},{5,4,25},{6,2,80},{7,2,10},{8,2,22}};
+    pair<int,int> jb=jobsequencing(jobs);
+    cout<<jb.first<<" "<<jb.second<<endl;
+    cout<<endl;
+
+
+    vector<int> ratings = {1, 0, 2};
+    cout<<"Minimum candies: "<<candy(ratings)<<endl;
+    cout<<endl;
+
+    
+    vector<int> jobs2={4,3,7,1,2};
+    cout<<sjf(jobs2);
     cout<<endl<<endl;
 
 

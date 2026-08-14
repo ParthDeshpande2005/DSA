@@ -73,7 +73,7 @@ void ArmstrongNumber(int n){
     int solution=0;
     int digit;
 
-    int count1=(int)(log10(n)+1);
+    int count1=(int)(log10(n)+1); //IMP 
 
     while(temp2>0){
         digit=temp2%10;
@@ -97,7 +97,8 @@ void PrintAllDivision(int n){
 
     //Method 2-->
     vector<int> answer;
-    for(int i=1;i<=sqrt(n);i++){//can also use i*i<=n instead of i<=sqrt(n)
+    for(int i=1;i*i<=n;i++){//can also use i<=sqrt(n) instead of i*i<=n.allways use i*i<=n 
+        //as the n might be updating some time so the n must also be changed with each loop. 
         if(n%i==0){
             answer.emplace_back(i);
             if(n/i!=i) answer.emplace_back(n/i);
@@ -113,12 +114,12 @@ void PrintAllDivision(int n){
 void CheckForPrime(int n){
 
     int count=0;
-    for(int i=1;i*i<n;i++)
+    for(int i=1;i*i<=n;i++)
     {
         if(n%i==0)
         {
             count++;
-            if((n/i)!=1) count++;
+            if((n/i)!=i) count++;
         }
     }
     if(count==2) cout<<"True";
@@ -148,6 +149,7 @@ void EquilateralAlgorithm(int a,int b){//to find hcf
     else cout<<a;
 
 }
+
 
 int main(){
 

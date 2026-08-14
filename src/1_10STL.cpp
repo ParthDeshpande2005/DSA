@@ -114,13 +114,14 @@ void explainVector(){
 
 void explainList(){
     
-    list<int> ls;
+    list<int> ls;// this is doubly Linked List.
 
     ls.push_back(2);//{2}
     ls.emplace_back(4);//{2,4}
 
     //In List we can use push_front insted of insert used in vector 
     //push_front,emplace_front is faster than insert
+    //we also have push_back ,emplace_back
     ls.push_front(5);//{5,2,4}
     ls.emplace_front(6);//{6,5,2,4}
 
@@ -151,7 +152,7 @@ void explainDeque(){
 
 void explainStack(){
     //follows LIFO- Last In First Out
-    //in stack we cant use indexing like st[3]
+    //in stack we can't use indexing like st[3]
 
     stack<int> st;
     st.push(1);//{1}
@@ -271,8 +272,8 @@ void explainSet(){
     //as in vector it does
 
     //this is the syntax
-    auto it5=st.lower_bound(2);
-    auto it6=st.upper_bound(3);
+    auto it5=st.lower_bound(2); //first element that is equal or greater than the target.
+    auto it6=st.upper_bound(3); //first element that is greater than strictly greater than the target.
   
 }
 
@@ -361,12 +362,15 @@ bool comp(pair<int,int>p1,pair<int,int>p2){
     }
     return false;
 }
-void Algorithms(){
 
+void Algorithms(){
+    //sizeof()-->returns the total memory footprint of an object or data type in bytes (runs at compile time usually)
+    //.size()-->returns the actual number of elements currently stored in a container (runs at runtime usually)
     //Sorting
         int arr[]={1,5,3,2,9,7};
         int n=sizeof(arr)/sizeof(arr[0]);//size of array gets divided by size of single element
-        sort(arr,arr+n);
+        sort(arr,arr+n);  // cant be sorted like sort(arr.begin(),arr.end()) like the vector
+        // but can be sorted like --> sort(begin(arr),end(arr));
 
         for(int x:arr){
             cout<<x<<" ";
@@ -399,7 +403,7 @@ void Algorithms(){
 
         cout<<endl;
     
-    //__builtin_popcount
+    //__builtin_popcount --> used to get the 1's bits of the number.
         
         int num1=7;
         int cnt1=__builtin_popcount(num1);//return 1's bit in 7 binary form which is 3(111)
@@ -414,7 +418,7 @@ void Algorithms(){
     //Next Permutation-->used to print all permutations of strings.
     //rearranges numbers into the next lexicographically greater permutation
     //if not possible, rearranges into the lowest possible order (sorted ascending)
-    //we alsso have prev_permutation in cpp
+    //we also have prev_permutation in cpp
         string s="123";//start matter karta hai kyu ki increasing order mai print hota hai.
 
         do{
