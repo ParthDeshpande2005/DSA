@@ -229,6 +229,41 @@ int sjf(vector<int> jobs){
 }
 
 
+//leetcode 57-->
+// different appoarch . my first thought was sorting like we do in merge intervals
+vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval){
+    //TC-O(N)  SC-O(N)
+    vector<vector<int>> result;
+    int n=intervals.size();
+    int i=0;
+
+    //left portion-->
+    while(i<n && intervals[i][1]<newInterval[0]){
+        result.push_back(intervals[i]);
+        i++;
+    }
+
+    //the middle portion where the newInterval will be added;
+    int left=newInterval[0];
+    int right=newInterval[1];
+    while(i<n && intervals[i][0]<=newInterval[1]){
+        left=min(left,intervals[i][0]);
+        right=max(right,intervals[i][1]);
+        i++;
+    }
+    result.push_back({left,right});
+
+    //right portion
+    while(i<n){
+        result.push_back(intervals[i]);
+        i++;
+    }
+
+    return result;
+
+}
+
+
 
 
 
@@ -279,6 +314,12 @@ int main(){
     cout<<endl<<endl;
 
 
+
+    vector<vector<int>> intervals ={{1, 3}, {6, 9}};
+    vector<int> newInterval = {2, 5};
+    vector<vector<int>> result3 = insert(intervals, newInterval);
+    for (auto interval : result3) {cout << "[" << interval[0] << ", " << interval[1] << "] ";}
+    cout<<endl;
 
     return 0;
 }
