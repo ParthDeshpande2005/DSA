@@ -12,3 +12,7 @@ Minimum candies: 5
 4
 
 [1, 5] [6, 9] 
+
+[1, 6] [8, 12] 
+
+Minimum intervals to remove: 1

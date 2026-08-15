@@ -264,8 +264,50 @@ vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInter
 }
 
 
+//leetcode 56-->
+static bool cmp3(const vector<int>&a,const vector<int>&b){
+    if(a[0]<b[0]) return true;
+    if(a[0]==b[0]){
+        if(a[1]<b[1]) return true;
+    }
+    return false;
+}
+vector<vector<int>> merge(vector<vector<int>>& intervals) {
+    int n=intervals.size();
+    sort(intervals.begin(),intervals.end(),cmp3); //also works the same without the cmp3 
+    //just use sort(intervals.begin(),intervals.end());
+    vector<vector<int>> result;
+    for(int i=0;i<n;i++){
+        int left=intervals[i][0];
+        int right=intervals[i][1];
+        while(i+1<n && right>=intervals[i+1][0]){
+            right=max(right,intervals[i+1][1]);
+            i++;
+        }
+        result.push_back({left,right});
+    }
+    return result;
+}
 
 
+// the question is like N meetings in one room...
+bool cmp4(vector<int> &a , vector<int>&b){
+    return a[1]<b[1];
+}
+int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+    int n=intervals.size();
+    sort(intervals.begin(),intervals.end(),cmp4); 
+    // we sort arrording to the ending time of the mittings..
+    int cnt=1;
+    int lastend=intervals[0][1];
+    for(int i=0;i<n;i++){
+        if(intervals[i][0]>=lastend){
+            cnt+=1;
+            lastend=intervals[i][1];
+        }
+    }
+    return n-cnt;
+}
 
 
 int main(){
@@ -319,7 +361,21 @@ int main(){
     vector<int> newInterval = {2, 5};
     vector<vector<int>> result3 = insert(intervals, newInterval);
     for (auto interval : result3) {cout << "[" << interval[0] << ", " << interval[1] << "] ";}
-    cout<<endl;
+    cout<<endl<<endl;
+
+
+
+    vector<vector<int>> intervals2 = { {1, 3}, {2, 6},{8, 10}, {9, 12}};
+    vector<vector<int>> result4 = merge(intervals2);
+    for (auto &interval : result4) { cout << "[" << interval[0] << ", " << interval[1] << "] "; }
+    cout<<endl<<endl;
+
+
+    vector<vector<int>> intervals3 ={{1, 2},{2, 3},{3, 4},{1, 3}};
+    cout << "Minimum intervals to remove: "<<eraseOverlapIntervals(intervals3) << endl;
+
+
+
 
     return 0;
 }

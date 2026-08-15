@@ -129,6 +129,7 @@ void leftrotatebyDplaces(vector<int> &arr,int n,int d){
    
 }
 
+//IMP can be solved without using a while in side.
 // solved in O(2n)
 vector<int> moveallzerotoend(vector<int> &arr,int n){
     int j=-1;
@@ -148,7 +149,7 @@ vector<int> moveallzerotoend(vector<int> &arr,int n){
     return arr;
 
     //my idea->
-    // for{  //this will get O(n^2)
+    // for{  //this will get O(n)
     //     while(!=0)
     // }
 }
@@ -239,6 +240,7 @@ vector<int> intersectionofsortedarray(vector<int>a,vector<int>b){
     return ans;
 }
 
+//IMP observation..
 int findmissingnumber(vector<int> arr,int N){
     
     //Method 1-->using xor.
@@ -274,6 +276,7 @@ int findmissingnumber(vector<int> arr,int N){
 }
 
 //not my first thought
+//Kadane's algo
 int maxconsecuteones(vector<int> arr,int n){
     int count=0;
     int maxi=0;
@@ -304,6 +307,7 @@ int findthenumberthatappearsonce(vector<int> arr){
     return ans;
 }
 
+//IMP presum concept is IMP 
 //using window method,hashing concept
 int longestsubarraywithsumK(vector<int> arr,long long k){
    
