@@ -311,7 +311,7 @@ int findthenumberthatappearsonce(vector<int> arr){
 //using window method,hashing concept
 int longestsubarraywithsumK(vector<int> arr,long long k){
    
-    // //Optimal solution-->
+    // //Optimal solution--> sliding window only used when all elements in array are positive.
     // int left=0,right=0;
     // long long sum=arr[0];
     // int maxLen=0;

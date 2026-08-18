@@ -49,12 +49,12 @@ vector<int> twoSum(vector<int> &nums, int target){
 
 }
 
-//Dutch national flag algorithm..
+//Dutch national flag algorithm...using 3 pointers
 vector<int> sortarrayof0_1_2(vector<int> &arr){
     //Dutch national flag algorithm..
     //optimal solution->
-    int n=arr.size()-1;
-    int low=0,mid=0,high=n;
+    int n=arr.size();
+    int low=0,mid=0,high=n-1;
     while(mid<=high){
         if(arr[mid]==0){
             swap(arr[mid],arr[low]);
@@ -221,7 +221,7 @@ vector<int> Rearrangearrayelementsbysign(vector<int> &arr){
     //make two array of n/2 to store positive and negative elements seprately. 
 }
 
-// 
+// IMP need to remember..
 void nextpermutation(vector<int> &arr){
 
     // //using stl

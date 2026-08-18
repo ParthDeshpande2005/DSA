@@ -52,7 +52,7 @@ void PascalTriangleType3(int row){
 
 //Boyer–Moore Voting Algorithm
 vector<int> MajorityElement2(vector<int> v){
-    //return all the elements that appear n/3 times.
+    //return all the elements that appear more than n/3 times.
 
     //Optimal Solution->time->O(n+n=n) one n is for checking. space->O(1)
     int cnt1=0,cnt2=0;
@@ -219,6 +219,7 @@ vector<vector<int>> FourSum(vector<int> &nums,int target){
 
 }
 
+//
 int largestsubarraywithsumzero(vector<int> &nums){
 
     // optimal-> TC->O(NlogN)  SC->O(n)
@@ -250,6 +251,7 @@ int largestsubarraywithsumzero(vector<int> &nums){
     // check for all subarray 2 for loop use karege O(n^2)
 }
 
+//
 int NoofsubarraywithxorK(vector<int> a,int k){
     int xr=0;
     map<int,int> mpp;
