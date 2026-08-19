@@ -17,6 +17,7 @@ int PascalTriangleType1(int row,int col){
     return nCr(row-1,col-1);
 }
 
+
 void PascalTriangleType2(int row){
     //return entire row->
     //optimal->
@@ -33,6 +34,7 @@ void PascalTriangleType2(int row){
     //for loop mai ncr wala formula use karke print karna
     //O(n*r)->time complexity
 }
+
 
 void PascalTriangleType3(int row){
     //print the entire triangle till n rows.
@@ -103,6 +105,7 @@ vector<int> MajorityElement2(vector<int> v){
 
 }
 
+
 vector<vector<int>> ThreeSum(vector<int> &nums){
     //our target value is zero
     
@@ -155,6 +158,7 @@ vector<vector<int>> ThreeSum(vector<int> &nums){
     //O(n^3 x log(m)) using 3 loops i(0->n) j(i+1->n) k(j+1->n)
     //using set to store the sorted value of(i,j,k) so that we get unique value.
 }
+
 
 vector<vector<int>> FourSum(vector<int> &nums,int target){
 
@@ -219,6 +223,7 @@ vector<vector<int>> FourSum(vector<int> &nums,int target){
 
 }
 
+
 //
 int largestsubarraywithsumzero(vector<int> &nums){
 
@@ -251,6 +256,7 @@ int largestsubarraywithsumzero(vector<int> &nums){
     // check for all subarray 2 for loop use karege O(n^2)
 }
 
+
 //
 int NoofsubarraywithxorK(vector<int> a,int k){
     int xr=0;
@@ -266,6 +272,7 @@ int NoofsubarraywithxorK(vector<int> a,int k){
     }
     return cnt;
 }
+
 
 vector<vector<int>> merge(vector<vector<int>>& intervals) {//leetcode 56 check there for test cases and question.
     int n=intervals.size();//sorting in pair first element ke base par hota hai. agar first element same hai to second element ke base par hota hai.
@@ -291,8 +298,9 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {//leetcode 56 check t
     return result;
 }
 
+
 //Merge 2 sorted array without extra space
-//Method 1-<
+//Method 1->
 void mergeM1(vector<int>& nums1,vector<int>& nums2){
     
     //O(min(n,m)+ n log n + m log m)
@@ -317,6 +325,7 @@ void mergeM1(vector<int>& nums1,vector<int>& nums2){
     // sort(nums1.begin(),nums1.end());//O(n log n)
     // sort(nums2.begin(),nums2.end());//O(m log m)
 }
+
 
 //Gap Method->
 //Method 2-> Gap Method(gap method comes from shell sorting)
@@ -350,6 +359,7 @@ void mergeM2(long long arr1[],long long arr2[],int n,int m){//TC->O(log2(n+m) * 
         gap = (gap/2)+(gap%2);
     }
 }
+
 
 vector<int> missingandrepeating(vector<int> & nums,int n){
     //ex->input=({3,4,6,2,1,1},6)
@@ -439,6 +449,7 @@ vector<int> missingandrepeating(vector<int> & nums,int n){
     //  if(cnt==0) missing;
     //  if(cnt==2) repeating;
 }
+
 
 int Merge(vector<int> &arr,int low,int mid,int high){//here & is used to pass by reference. which changes the original value . 
     vector<int> temp;
