@@ -1,12 +1,3 @@
-Preorder (One Traversal): 1 2 4 5 3 6 7 
-Inorder (One Traversal): 4 2 5 1 6 3 7 
-Postorder (One Traversal): 4 5 2 6 7 3 1 
-
-Recursive Preorder: 1 2 4 5 3 6 7 
-Recursive Inorder: 4 2 5 1 6 3 7 
-Recursive Postorder: 4 5 2 6 7 3 1 
-
-Level Order Traversal:
-1 
-2 3 
-4 5 6 7 
+Maximum Depth: 3
+Is Balanced: Yes
+Diameter: 3
