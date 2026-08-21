@@ -1,3 +1,6 @@
 Maximum Depth: 3
 Is Balanced: Yes
 Diameter: 3
+Maximum Path Sum: 11
+Same Tree: Yes
+Root1 and Root3 Same Tree: No

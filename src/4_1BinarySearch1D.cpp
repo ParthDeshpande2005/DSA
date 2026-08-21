@@ -479,6 +479,9 @@ int findPeakElement(vector<int>& nums) {
     return -1;
 }
 
+//try solving leetcode 3116 easy binary search implementiation but the 
+//problem is very different it is based on inclusion and exclusion type of problem
+//it is a hard problem watch codestorywithmik video to completely understand it.
 
 int main(){
 
