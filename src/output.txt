@@ -1,6 +1,28 @@
+========== Main Tree ==========
 Maximum Depth: 3
 Is Balanced: Yes
 Diameter: 3
 Maximum Path Sum: 11
-Same Tree: Yes
-Root1 and Root3 Same Tree: No
+Zigzag Traversal: [ 1 ] [ 3 2 ] [ 4 5 ] 
+Boundary Traversal: 1 2 4 5 3 
+
+========== Same Tree Test ==========
+Root and SameTree: Yes
+Root and DifferentTree: No
+
+========== Unbalanced Tree ==========
+Maximum Depth: 4
+Is Balanced: No
+Diameter: 3
+Maximum Path Sum: 11
+Boundary Traversal: 1 2 3 4 
+
+========== Negative Value Tree ==========
+Maximum Path Sum: 42
+
+========== Empty Tree ==========
+Maximum Depth: 0
+Is Balanced: Yes
+Diameter: 0
+Maximum Path Sum: 42
+Boundary Traversal: 
