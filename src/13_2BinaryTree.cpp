@@ -217,54 +217,278 @@ vector<int> boundrytraversal(TreeNode* root){
 }
 
 
+//leetcode 987 
+//very very different data structure is used .
+// IMP..
+vector<vector<int>> verticalTraversal(TreeNode* root) {
+    vector<vector<int>> result;
+    if(root==NULL) return result;
+    queue<tuple<TreeNode*, int, int>> que; //treenode , vertical level, horizontal level.
+    que.push({root,0,0});
+   
+    map<int,map<int,multiset<int>>> mpp; // map to store the results. 
+    //we will perform level order traversal.
+    while(!que.empty()){
+        auto [node, verlevel, horlevel] = que.front();
+        que.pop();
+        mpp[verlevel][horlevel].insert(node->val);
+        if(node->left!=NULL){
+            que.push({node->left,verlevel-1,horlevel+1});
+        }
+        if(node->right!=NULL){
+            que.push({node->right,verlevel+1,horlevel+1});
+        }
+    }
+    for(auto it:mpp){ //vertical level
+        vector<int> temp;
+        for(auto k:it.second){ //horizontal level
+            for(int x:k.second){
+                temp.push_back(x);
+            }
+        }
+        result.push_back(temp);
+    }
+    return result;
+}
+
+
+// in this we dont use a recursion code as the recursion logic does not visit the horizontal level wise node first.
+// we need to write more logic to maintain the horizontal logic in the code for recursion as well
+// this is the iterative logic for the code --> using the logic as the previous problem.
+vector<int> TopviewofBT(TreeNode* root){
+    vector<int> result;
+    if(root==NULL) return result;
+
+    queue<tuple<TreeNode*,int>> que;
+    que.push({root,0});
+    map<int,int> mpp; //for each vertical level one ans
+
+    while(!que.empty()){
+        auto[node,level]=que.front();
+        que.pop();
+        
+        if(mpp.find(level)==mpp.end()){
+            mpp[level]=node->val;
+        }
+
+        if(node->left!=NULL){
+            que.push({node->left,level-1});  
+        }
+        if(node->right!=NULL){
+            que.push({node->right,level+1});
+        }
+
+    }
+
+    for(auto it:mpp){
+        result.push_back(it.second);
+    }
+
+    return result;
+}
+
+
+vector<int> BottomviewBT(TreeNode* root){
+    vector<int> result;
+    if(root==NULL) return result;
+
+    queue<tuple<TreeNode*,int>> que;
+    que.push({root,0});
+
+    map<int,int> mpp;
+
+    while(!que.empty()){
+        auto [node,level]=que.front();
+        que.pop();
+
+        mpp[level]=node->val;
+
+        if(node->left!=NULL){
+            que.push({node->left,level-1});
+        }
+        if(node->right!=NULL){
+            que.push({node->right,level+1});
+        }
+    }
+
+    for(auto k:mpp){
+        result.push_back(k.second);
+    }
+    return result;
+}
+
+
+//leetcode 199
+void solve(TreeNode* node,int level,vector<int> & result){
+    if(node==NULL) return;
+    if(result.size()==level) result.push_back(node->val);
+    solve(node->right,level+1,result);
+    solve(node->left,level+1,result);
+}
+vector<int> RightviewBT(TreeNode* root){
+
+    //DFS logic--> Recursive. (Preorder,Inorder,Postorder)
+    // will have lower space complexity than BFS solution.
+    // we will implement the reverse preorder traversal --> (root,right,left)
+    vector<int> result;
+    solve(root,0,result);
+    return result;
+
+    // //BFS logic--> Iterative. (levelorder)
+    // vector<int> result;
+    // if(root==NULL) return result;
+
+    // queue<tuple<TreeNode*,int>> que;
+    // que.push({root,0});
+
+    // map<int,int> mpp;
+
+    // while(!que.empty()){
+    //     auto [node,level]=que.front();
+    //     que.pop();
+
+    //     mpp[level]=node->val;
+
+    //     if(node->left!=NULL){
+    //         que.push({node->left,level+1});
+    //     }
+    //     if(node->right!=NULL){
+    //         que.push({node->right,level+1});
+    //     }
+    // }
+    
+    // for(auto it:mpp){
+    //     result.push_back(it.second);
+    // }
+    
+    // return result;
+}
+
+
+void solve2(TreeNode* node,int level,vector<int> & result){
+    if(node==NULL) return;
+    if(result.size()==level) result.push_back(node->val);
+    solve2(node->left,level+1,result);
+    solve2(node->right,level+1,result);
+}
+vector<int> LeftviewBT(TreeNode* root){
+    //DFS-->
+    vector<int> result;
+    solve2(root,0,result);
+    return result;
+    
+    // //BFS-->
+    // vector<int> result;
+    // if(root==NULL) return result;
+
+    // queue<tuple<TreeNode*,int>> que;
+    // que.push({root,0});
+
+    // map<int,int> mpp;
+
+    // while(!que.empty()){
+    //     auto [node,level]=que.front();
+    //     que.pop();
+
+    //     mpp[level]=node->val;
+
+    //     if(node->right!=NULL){
+    //         que.push({node->right,level+1});
+    //     }
+
+    //     if(node->left!=NULL){
+    //         que.push({node->left,level+1});
+    //     }
+    // }
+    
+    // for(auto it:mpp){
+    //     result.push_back(it.second);
+    // }
+    
+    // return result;
+
+}
 
 
 int main() {
 
     /*
-            Main Tree
                 1
-               / \
-              2   3
-             / \
-            4   5
-
-        Used for:
-        - Maximum Depth
-        - Balanced Binary Tree
-        - Diameter
-        - Maximum Path Sum
-        - Zigzag Level Order
-        - Boundary Traversal
+              /   \
+             2     3
+            / \   / \
+           4   5 6   7
+              /
+             8
     */
 
+    // Creating a single tree
     TreeNode* root = new TreeNode(1);
+
     root->left = new TreeNode(2);
     root->right = new TreeNode(3);
+
     root->left->left = new TreeNode(4);
     root->left->right = new TreeNode(5);
 
+    root->right->left = new TreeNode(6);
+    root->right->right = new TreeNode(7);
 
-    cout << "========== Main Tree ==========" << endl;
+    root->left->right->left = new TreeNode(8);
+
+
+    // =====================================================
+    // Maximum Depth - Leetcode 104
+    // =====================================================
 
     cout << "Maximum Depth: "
          << maxDepth(root) << endl;
 
+
+    // =====================================================
+    // Balanced Binary Tree - Leetcode 110
+    // =====================================================
+
     cout << "Is Balanced: "
          << (isBalanced(root) ? "Yes" : "No") << endl;
 
+
+    // =====================================================
+    // Diameter - Leetcode 543
+    // =====================================================
+
     cout << "Diameter: "
          << diameterOfBinaryTree(root) << endl;
+
+
+    // =====================================================
+    // Maximum Path Sum - Leetcode 124
+    // =====================================================
+
+    maxpath = INT_MIN;
 
     cout << "Maximum Path Sum: "
          << maxPathSum(root) << endl;
 
 
-    // Zigzag Level Order
+    // =====================================================
+    // Same Tree - Leetcode 100
+    // =====================================================
+
+    /*
+        Comparing root with itself just to test the function.
+    */
+
+    cout << "Is Same Tree: "
+         << (isSameTree(root, root) ? "Yes" : "No") << endl;
+
+
+    // =====================================================
+    // Zigzag Level Order - Leetcode 103
+    // =====================================================
+
     vector<vector<int>> zigzag = zigzagLevelOrder(root);
-
     cout << "Zigzag Traversal: ";
-
     for(auto level : zigzag) {
         cout << "[ ";
         for(int x : level) {
@@ -272,176 +496,84 @@ int main() {
         }
         cout << "] ";
     }
-
     cout << endl;
 
 
+    // =====================================================
     // Boundary Traversal
+    // =====================================================
+
     vector<int> boundary = boundrytraversal(root);
-
     cout << "Boundary Traversal: ";
-
     for(int x : boundary) {
         cout << x << " ";
     }
-
     cout << endl;
 
 
-    /*
-            Same Tree Test
+    // =====================================================
+    // Vertical Traversal - Leetcode 987
+    // =====================================================
 
-            Tree 2 is structurally and
-            value-wise identical to root.
-
-                1
-               / \
-              2   3
-             / \
-            4   5
-    */
-
-    TreeNode* sameTree = new TreeNode(1);
-    sameTree->left = new TreeNode(2);
-    sameTree->right = new TreeNode(3);
-    sameTree->left->left = new TreeNode(4);
-    sameTree->left->right = new TreeNode(5);
-
-    cout << "\n========== Same Tree Test ==========" << endl;
-
-    cout << "Root and SameTree: "
-         << (isSameTree(root, sameTree) ? "Yes" : "No")
-         << endl;
+    vector<vector<int>> vertical = verticalTraversal(root);
+    cout << "Vertical Traversal: ";
+    for(auto level : vertical) {
+        cout << "[ ";
+        for(int x : level) {
+            cout << x << " ";
+        }
+        cout << "] ";
+    }
+    cout << endl;
 
 
-    /*
-            Different Tree
+    // =====================================================
+    // Top View
+    // =====================================================
 
-                1
-               / \
-              2   3
-             /
-            4
-
-    */
-
-    TreeNode* differentTree = new TreeNode(1);
-    differentTree->left = new TreeNode(2);
-    differentTree->right = new TreeNode(3);
-    differentTree->left->left = new TreeNode(4);
-
-    cout << "Root and DifferentTree: "
-         << (isSameTree(root, differentTree) ? "Yes" : "No")
-         << endl;
-
-
-    /*
-            Unbalanced Tree
-
-                1
-               /
-              2
-             /
-            3
-           /
-          4
-
-        Used to test:
-        - Maximum Depth
-        - Balanced Binary Tree
-        - Diameter
-        - Maximum Path Sum
-        - Boundary Traversal
-    */
-
-    TreeNode* unbalanced = new TreeNode(1);
-    unbalanced->left = new TreeNode(2);
-    unbalanced->left->left = new TreeNode(3);
-    unbalanced->left->left->left = new TreeNode(4);
-
-    cout << "\n========== Unbalanced Tree ==========" << endl;
-
-    cout << "Maximum Depth: "
-         << maxDepth(unbalanced) << endl;
-
-    cout << "Is Balanced: "
-         << (isBalanced(unbalanced) ? "Yes" : "No") << endl;
-
-    cout << "Diameter: "
-         << diameterOfBinaryTree(unbalanced) << endl;
-
-    cout << "Maximum Path Sum: "
-         << maxPathSum(unbalanced) << endl;
-
-    vector<int> unbalancedBoundary =
-        boundrytraversal(unbalanced);
-
-    cout << "Boundary Traversal: ";
-
-    for(int x : unbalancedBoundary) {
+    vector<int> top = TopviewofBT(root);
+    cout << "Top View: ";
+    for(int x : top) {
         cout << x << " ";
     }
-
     cout << endl;
 
 
-    /*
-            Negative Value Tree
+    // =====================================================
+    // Bottom view
+    // =====================================================
 
-                -10
-                /  \
-               9    20
-                   /  \
-                  15   7
-
-        Used specifically to test
-        Maximum Path Sum with negative values.
-
-        Answer = 15 + 20 + 7 = 42
-    */
-
-    TreeNode* negativeTree = new TreeNode(-10);
-    negativeTree->left = new TreeNode(9);
-    negativeTree->right = new TreeNode(20);
-    negativeTree->right->left = new TreeNode(15);
-    negativeTree->right->right = new TreeNode(7);
-
-    cout << "\n========== Negative Value Tree ==========" << endl;
-
-    cout << "Maximum Path Sum: "
-         << maxPathSum(negativeTree) << endl;
-
-
-    /*
-            Empty Tree
-    */
-
-    TreeNode* emptyTree = nullptr;
-
-    cout << "\n========== Empty Tree ==========" << endl;
-
-    cout << "Maximum Depth: "
-         << maxDepth(emptyTree) << endl;
-
-    cout << "Is Balanced: "
-         << (isBalanced(emptyTree) ? "Yes" : "No") << endl;
-
-    cout << "Diameter: "
-         << diameterOfBinaryTree(emptyTree) << endl;
-
-    cout << "Maximum Path Sum: "
-         << maxPathSum(emptyTree) << endl;
-
-    cout << "Boundary Traversal: ";
-
-    vector<int> emptyBoundary =
-        boundrytraversal(emptyTree);
-
-    for(int x : emptyBoundary) {
+    vector<int> bottom = BottomviewBT(root);
+    cout << "Bottom View: ";
+    for(int x : bottom) {
         cout << x << " ";
     }
-
     cout << endl;
+
+    // =====================================================
+    // Right view
+    // =====================================================
+    
+    vector<int> right = RightviewBT(root);
+    cout << "Right View: ";
+    for(int x : right) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+
+    // =====================================================
+    // Left view
+    // =====================================================
+    
+    vector<int> left = LeftviewBT(root);
+    cout << "Left View: ";
+    for(int x : left) {
+        cout << x << " ";
+    }
+    cout << endl;
+
+
 
 
     return 0;
