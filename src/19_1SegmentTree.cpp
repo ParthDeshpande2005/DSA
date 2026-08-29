@@ -131,7 +131,7 @@ public:
 
 
 // leetcode 2213--> 
-class Solution {
+class Solution1 {
 public:
     struct Node{
         int maxlen=0;
@@ -220,7 +220,134 @@ public:
     }
 };
 
-// leetcode 3072
+
+// leetcode 3072-->
+// this is very important que for segment tree
+// we learn how to compress the segment tree.
+//this is used to solve query -> how many element are strictly greater/smaller than nums[i]
+//in a growing list/vector/array "without needing so much space."
+class SegmentTree{
+public:
+    int m;
+    vector<int> segTree;
+
+    SegmentTree(int size){
+        m=size;
+        segTree.assign(4*m,0); // initialization with frequency 0.
+    }
+
+    void segTreeUpdate(int i,int l,int r,int cv){
+        if(l==r){
+            segTree[i]++;
+            return ;
+        }
+
+        int mid=l+(r-l)/2;
+        if(cv<=mid){
+            segTreeUpdate(2*i+1,l,mid,cv);
+        }
+        else{
+            segTreeUpdate(2*i+2,mid+1,r,cv);
+        }
+
+        segTree[i]=segTree[2*i+1]+segTree[2*i+2];
+    }
+
+    void update(int cv){
+        //0=index of root
+        //0=start range
+        //m-1=end range
+        //cv-compressed value.
+        segTreeUpdate(0,0,m-1,cv);
+    }
+
+    int segTreeQueryRangeSum(int start,int end,int i,int l,int r){
+        if(l>end || r<start){ //out of range
+            return 0; //no overlap
+        }
+        if(l>=start && r<=end){ //completely inside range.
+            return segTree[i]; //return frequency
+        }
+
+        int mid=l+(r-l)/2;
+
+        return segTreeQueryRangeSum(start,end,2*i+1,l,mid)+segTreeQueryRangeSum(start,end,2*i+2,mid+1,r);
+
+    }
+
+    int query(int start,int end){
+        return segTreeQueryRangeSum(start,end,0,0,m-1);
+    }
+};
+class Solution {
+public:
+    vector<int> resultArray(vector<int>& nums) {
+        int n=nums.size();
+        
+        vector<int> sortednums(begin(nums),end(nums));
+        // we are sorting as we need to assign higher value to the larger number 
+        // so than order remain maintain and we are able to find the numbers larger than the current easily
+        sort(sortednums.begin(),sortednums.end()); // Sort the array
+
+        unordered_map<int,int> mp; //to store nums[i] --> compressed value
+        int CompressedValue=0;
+
+        for(int &num:sortednums){ //compressed value given to nums
+            if(!mp.count(num)){
+                mp[num]=CompressedValue;
+                CompressedValue++;
+            }
+        }
+
+        int m=mp.size(); //compressed values=0,1,2,...m-1
+
+        vector<int> arr1;
+        vector<int> arr2;
+
+        SegmentTree segTree1(m);
+        SegmentTree segTree2(m);
+
+        //1st operation
+        arr1.push_back(nums[0]);
+        segTree1.update(mp[nums[0]]);
+
+        //2nd operation
+        arr2.push_back(nums[1]);
+        segTree2.update(mp[nums[1]]);
+
+        for(int i=2;i<n;i++){
+            int cv=mp[nums[i]]; //compressed value.
+            int cnt1=segTree1.query(cv+1,m-1);//number of elements > nums[i] in arr1
+            int cnt2=segTree2.query(cv+1,m-1);//number of elements > nums[i] in arr2
+
+            bool addtoarr1=false;
+            if(cnt1>cnt2){
+                addtoarr1=true;
+            }
+            else if(cnt2>cnt1){
+                addtoarr1=false;
+            }
+            else{
+                addtoarr1=(arr1.size()<=arr2.size());
+            }
+
+            if(addtoarr1){
+                arr1.push_back(nums[i]);
+                segTree1.update(cv);
+            }
+            else{
+                arr2.push_back(nums[i]);
+                segTree2.update(cv);
+            }
+        }
+
+        arr1.insert(end(arr1),begin(arr2),end(arr2));
+        return arr1;
+    }
+};
+
+
+
 
 int main(){
 
@@ -255,7 +382,7 @@ int main(){
 
 
 
-    Solution sol;
+    Solution1 sol;
     string s = "aaabbb";
     string queryCharacters = "aaa";
     vector<int> queryIndices = {3, 4, 5};
