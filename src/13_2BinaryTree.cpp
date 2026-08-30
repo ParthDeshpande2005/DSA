@@ -410,6 +410,72 @@ vector<int> LeftviewBT(TreeNode* root){
 }
 
 
+//leetcode 101
+//Symmetric Tree
+bool isSymmetricRecursive(TreeNode* leftnode,TreeNode* rightnode){
+    if(leftnode==NULL || rightnode==NULL){
+        return leftnode==rightnode;
+    }
+    if(leftnode->val!=rightnode->val) return false;
+
+    return isSymmetricRecursive(leftnode->left,rightnode->right) && isSymmetricRecursive(leftnode->right,rightnode->left);
+}
+bool isSymmetric(TreeNode* root) {
+    //Recursive solution-->
+    if(root==NULL) return true;
+    return isSymmetricRecursive(root->left,root->right);
+
+
+    // //Iterative my solution --> using 2 queue we can even use 2 stack or 1stack and 1 que.
+    // if(root==NULL) return true;
+
+    // //lets take 2 que; 
+    // //we will push left,right in one que
+    // //and we will push right ,left in 2nd que
+    // queue<TreeNode*> que1;
+    // queue<TreeNode*> que2;
+
+    // que1.push(root->left);
+    // que2.push(root->right);
+       
+
+        // while(!que1.empty() && !que2.empty()){
+
+        //     TreeNode* left_tree=que1.front();
+        //     TreeNode* right_tree=que2.front();
+        //     que1.pop();
+        //     que2.pop();
+
+        //     if(left_tree!=NULL && right_tree!=NULL){
+        //         if(left_tree->val!=right_tree->val) return false;
+        //     }
+
+        //     if(left_tree!=NULL && right_tree==NULL) return false;
+        //     if(left_tree==NULL && right_tree!=NULL) return false;
+
+        //     if(left_tree!=NULL){
+        //         que1.push(left_tree->left);
+        //         que1.push(left_tree->right);
+        //     }
+        //     if(right_tree!=NULL){
+        //         que2.push(right_tree->right);
+        //         que2.push(right_tree->left);
+        //     }
+
+        // }
+
+        // if(que1.empty()){
+        //     if(!que2.empty()) return false;
+        // }
+        // if(que2.empty()){
+        //     if(!que1.empty()) return false;
+        // }
+        
+        // return true;
+    }
+
+
+
 int main() {
 
     /*
@@ -574,6 +640,32 @@ int main() {
     cout << endl;
 
 
+    // =====================================================
+    // Symmetric Tree - Leetcode 101
+    // =====================================================
+
+    /*
+              1
+            /   \
+           2     2
+          / \   / \
+         3   4 4   3
+    */
+
+    TreeNode* symmetricRoot = new TreeNode(1);
+
+    symmetricRoot->left = new TreeNode(2);
+    symmetricRoot->right = new TreeNode(2);
+
+    symmetricRoot->left->left = new TreeNode(3);
+    symmetricRoot->left->right = new TreeNode(4);
+
+    symmetricRoot->right->left = new TreeNode(4);
+    symmetricRoot->right->right = new TreeNode(3);
+
+
+    cout << "Is Symmetric: "
+         << (isSymmetric(symmetricRoot) ? "Yes" : "No") << endl;
 
 
     return 0;
