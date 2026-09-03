@@ -300,7 +300,145 @@ vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
 }
 
 
+//follows the same idea of the previous que distanceK.
+//Minimum time taken to Burn a BT from any node
+int MintoburnBT(TreeNode* root,TreeNode* node){
+    //we will perforn bfs for this que.
+    //first we need to make a map to find parent of BT
+    queue<TreeNode*> que;
+    que.push(root);
 
+    unordered_map<TreeNode*,TreeNode*> parentpointer;
+
+    //getting the parent pointer map ready.
+    while(!que.empty()){
+        TreeNode* cur=que.front();
+        que.pop();
+
+        if(cur->left){
+            que.push(cur->left);
+            parentpointer[cur->left]=cur;
+        }
+        if(cur->right){
+            que.push(cur->right);
+            parentpointer[cur->right]=cur;
+        }
+    }
+
+    queue<TreeNode*> que2;
+    que2.push(node);
+    
+    unordered_map<TreeNode*,int> visited;
+
+    int time=0;
+    
+    while(!que2.empty()){
+        time++;
+        int s=que2.size();
+        for(int i=0;i<s;i++){
+            TreeNode* cur=que2.front();
+            que2.pop();
+
+            if(cur->left ){
+                if(visited.find(cur->left)==visited.end()){
+                    que2.push(cur->left);
+                    visited[cur->left]++;
+                }
+            }
+            if(cur->right){
+                if(visited.find(cur->right)==visited.end()){
+                    que2.push(cur->right);
+                    visited[cur->right]++;
+                }
+            }
+            if(parentpointer.find(cur)!=parentpointer.end()){
+                if(visited.find(parentpointer[cur])==visited.end()){
+                    que2.push(parentpointer[cur]);
+                    visited[parentpointer[cur]]++;
+                }
+            }
+        }
+    }
+    return time-1; //as the node we are starting at is burned at time=0.
+}
+
+
+//IMP as the optimal appoarch is different.
+//leetcode 222 
+int countNodesrecursive(TreeNode* node){
+    if(node==NULL) {
+        return 0;
+    }
+
+    return 1+countNodesrecursive(node->left)+countNodesrecursive(node->right);
+}
+int countNodesoptimal(TreeNode* node){
+    if(node==NULL) return 0;
+    int lh=0; //left height
+    int rh=0; //right height
+
+    TreeNode* temp=node;
+    while(temp!=NULL){
+        lh++;
+        temp=temp->left;
+    }
+    temp=node;
+    while(temp!=NULL){
+        rh++;
+        temp=temp->right;
+    }
+
+    if(lh==rh) return (1<<lh)-1; // (2^lh)-1
+
+    else{
+        return 1+countNodesoptimal(node->left)+countNodesoptimal(node->right);
+    }
+
+}
+int countNodes(TreeNode* root) {
+    //optimal-->
+    return countNodesoptimal(root);
+
+    //O(N) but we are asked less than O(N)
+    //as the que is for complete binary tree we can have more optimal solution.
+    // better->
+
+    // return countNodesrecursive(root);
+}
+
+
+//can you create a unique Binary Tree with the followig
+
+//(i) Preorder & Postorder -> NO
+
+//preorder-> 1 2 3
+//postorder-> 3 2 1 
+
+// this can create two different tree.
+
+//         1            1
+//        /            /
+//       2            2
+//      /              \
+//     3                3
+
+// therefore we can't create a unique BT from preorder and postorder.
+
+//(ii) Preorder & Inorder -> YES 
+
+//preorder-> 3 9 20 15 7
+//inorder-> 9 3 15 20 7
+
+//this can be created as->
+
+//           3
+//          /  \
+//         9    20
+//             /  \
+//            15   7
+
+//we are able create a uniue BT 
+//therefore we observe that Inorder is must with either perorder or postorder to get unique BT.
 
 
 

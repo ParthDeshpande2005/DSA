@@ -1,5 +1,6 @@
 // #include <bits/stdc++.h>
 // using namespace std;
+
 // //If,else
 // int main(){
 //     int age;
@@ -12,6 +13,7 @@
 //     }
 //     return 0;
 // }
+
 // /*
 // this is how we 
 // write a multiple line

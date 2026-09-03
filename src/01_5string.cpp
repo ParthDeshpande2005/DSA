@@ -10,6 +10,9 @@ int main(){
     return 0;
 }
 
+//in string we can even use tolower()--> this is implemented on charcter only.
+//stoi(str) used to convert the string to int.
+
 //out of size() and length() 
 //size() is prefered as it works for all containers and string.
 //where as length() does not work for containers
