@@ -442,6 +442,155 @@ int countNodes(TreeNode* root) {
 
 
 
+
+
+
+
+
+
+//Morris Traversal--> Inorder Traversal.
+//leetcode 94
+vector<int> inorderTraversal(TreeNode* root) {
+    //1st case->
+    //left is NULL then we print root and move to right.
+
+    //2nd case->
+    //before moving to left the right most guy should be connected to root.
+    //then go to root.at root if the connect is there form left subtree the remove that connection and move to right of the node.
+         
+    vector<int> inorder;
+    TreeNode* cur=root;
+    while(cur!=NULL){
+        if(cur->left==NULL){ //1st case
+            inorder.push_back(cur->val);
+            cur=cur->right;
+        }
+        else{ //2nd case
+            TreeNode* prev=cur->left;
+            while(prev->right && prev->right!=cur){
+                prev=prev->right;
+            }
+            if(prev->right==NULL){
+                prev->right=cur;
+                cur=cur->left;
+            }
+            else{ //when the prev->right==cur 
+            //in this we need to remove the connection and move right
+                prev->right=NULL;
+                inorder.push_back(cur->val);
+                cur=cur->right;
+            }
+        }
+    }
+    return inorder;
+}
+
+
+//Morris Traversal
+//leetcode 144 Preorder
+//root left right
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> preorder;
+    TreeNode* cur=root;
+    while(cur!=NULL){
+        //now check if left is availabel->
+        if(cur->left==NULL){
+            preorder.push_back(cur->val);
+            cur=cur->right;
+        }
+        else{
+            TreeNode* prev=cur->left;
+
+            while(prev->right && prev->right!=cur){
+                prev=prev->right;
+            }
+            if(prev->right==NULL){
+                prev->right=cur;
+                preorder.push_back(cur->val);
+                cur=cur->left;
+            }
+            else{
+                prev->right=NULL;
+                cur=cur->right;
+            }
+        }
+    }
+    return preorder;
+}
+
+
+//we can even do postorder with the morris traversal 
+//but it is more complex than preorder and inorder i will do it when i feel like it.
+
+
+//leetcode 114->
+static TreeNode* prev2=NULL;
+void flatten_recursive(TreeNode* node){
+    //we try to go in reverse preorder way like ->
+    // right->left->root
+    if(node==NULL){
+        return ;
+    }
+    flatten_recursive(node->right);
+    flatten_recursive(node->left);
+    node->right=prev2;
+    node->left=nullptr;
+    prev2=node;
+}
+void flatten(TreeNode* root) {
+    // //Recursive solution-> TC->O(N)  SC->O(N)
+    // flatten_recursive(root);
+
+    //just like morris traversal -->most optimal TC->O(N)  SC->O(1)
+    //Iterative 
+    TreeNode* cur=root;
+    while(cur!=NULL){
+        if(cur->left==NULL){
+            cur=cur->right;
+        }
+        else{
+            TreeNode* prev=cur->left;
+            while(prev->right && prev->right!=cur){
+                prev=prev->right;
+            }
+            if(prev->right==NULL){
+                prev->right=cur; //we use cur and not cur->right as it will ruin our while loop check for prev
+            }
+            else{
+                prev->right=cur->right;
+                cur->right=cur->left;
+                cur->left=NULL;
+                cur=cur->right;
+            }
+        }
+    }
+
+    // //Iterative using stack-> TC->O(N)  SC->O(N)
+    // //we wil insert the right and then left in stack
+    // stack<TreeNode*> st;
+    // if(root==NULL) return;
+    // st.push(root);
+    // while(!st.empty()){
+    //     TreeNode* cur=st.top();
+    //     st.pop();
+
+    //     if(cur->right){
+    //         st.push(cur->right);
+    //     }
+    //     if(cur->left){
+    //         st.push(cur->left);
+    //     }
+
+    //     if(!st.empty()){
+    //         cur->right =st.top();
+    //     }
+    //     cur->left=NULL;
+    // }
+}
+
+
+
+//int main is not updated yet...
 int main() {
 
     /*

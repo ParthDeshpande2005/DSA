@@ -1,10 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-
+//leetcode 215-> IMP very different appoarch for the optimal solution.
+//for optimal T.C is O(N) if we select the worst node as the node selection is random.
+//so in worst case we will travel all the nodes.
 int randomIdx(int &left,int &right){
     int len=right-left+1;
     return(rand()%len)+left;
+    //rand is used to get a random number between 0 and len.
 }
 // K largest element in array-->
 int placeatrightindex(int pivotidx,int left,int right,vector<int>&nums){
@@ -25,7 +28,7 @@ int placeatrightindex(int pivotidx,int left,int right,vector<int>&nums){
 }
 int Klargestelement(vector<int>& nums,int K){
 
-    //optimal--> TC-O(N) SC-O(1) 
+    //optimal--> TC-O(N) SC-O(1) also known as pivot selection appoarch
     int n=nums.size();
     if(K>n) return -1;
     int left=0;

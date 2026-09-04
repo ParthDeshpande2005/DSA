@@ -91,3 +91,6 @@ int main(){
 //     cout<<"value inside int main: "<<arr[0]<<endl;
 //     return 0;
 // }
+
+// we also have default parameter in cpp
+//ex-> void func(int a=0){} 

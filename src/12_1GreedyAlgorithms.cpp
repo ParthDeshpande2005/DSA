@@ -163,6 +163,50 @@ int fractionalknapsack(vector<vector<int>>& arr,int capacity){
 }
 
 
+//leetcode 1753--> not in int main check on leetcode it self.
+int maximumScore(int a, int b, int c) {
+    //optimal->
+    int sum=a+b+c;
+    int maxi=max(a,max(b,c));
+
+    if(maxi>sum-maxi){
+        return sum-maxi;
+    }
+
+    return sum/2;
+
+    // //better->
+    // priority_queue<int> pq;
+    // pq.push(a);
+    // pq.push(b);
+    // pq.push(c);
+
+    // int result=0;
+    // while(pq.size()>1){
+    //     int maxi=pq.top();
+    //     pq.pop();
+    //     int maxi2=pq.top();
+    //     pq.pop();
+
+    //     maxi=maxi-1;
+    //     maxi2=maxi2-1;
+            
+    //     result++;
+
+    //     if(maxi!=0){
+    //         pq.push(maxi);
+    //     }
+    //     if(maxi2!=0){
+    //         pq.push(maxi2);
+    //     }
+
+
+    // }
+    // return result;
+}
+
+
+
 int main(){
 
 

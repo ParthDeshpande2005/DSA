@@ -1,4 +1,12 @@
-22
-0xc963ff8a0
-78
-12
+Root to node 4 path: 10 5 4 
+
+LCA of 2 and 4: 5
+
+Maximum width of binary tree: 4
+
+Before Children Sum Property:
+Root = 10
+After Children Sum Property:
+Root = 30
+
+Nodes at distance 1 from target 20: 10 10 30 
