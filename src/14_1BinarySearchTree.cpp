@@ -80,4 +80,52 @@ vector<int> minmaxBST(TreeNode* root){
 
 int main(){
 
+    // Creating the BST:
+    //
+    //          8
+    //         / \
+    //        3   10
+    //       / \    \
+    //      1   6    14
+    //         / \   /
+    //        4   7  13
+
+    TreeNode* root = new TreeNode(8);
+
+    root->left = new TreeNode(3);
+    root->right = new TreeNode(10);
+
+    root->left->left = new TreeNode(1);
+    root->left->right = new TreeNode(6);
+
+    root->left->right->left = new TreeNode(4);
+    root->left->right->right = new TreeNode(7);
+
+    root->right->right = new TreeNode(14);
+    root->right->right->left = new TreeNode(13);
+
+
+    // Search in BST
+    int val = 7;
+
+    TreeNode* result = searchBST(root, val);
+
+    if(result != NULL){
+        cout << "Value " << val << " found in BST." << endl;
+    }
+    else{
+        cout << "Value " << val << " not found in BST." << endl;
+    }
+
+
+    // Find minimum and maximum
+    vector<int> ans = minmaxBST(root);
+
+    if(!ans.empty()){
+        cout << "Minimum value: " << ans[0] << endl;
+        cout << "Maximum value: " << ans[1] << endl;
+    }
+
+
+    return 0;
 }
