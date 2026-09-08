@@ -48,6 +48,7 @@ bool CheckforSortedArray(vector<int> arr,int n){
 }
 
 void Printuniqenum(vector<int> arr){//both method only work on sorted array(key point)
+    //without sort we can use map or set..
     //my Method->
     int count=1;
     int comp=arr[0];
@@ -99,7 +100,7 @@ void leftrotatebyDplaces(vector<int> &arr,int n,int d){
     reverse(a,a+n)
     */
     d=d%n;
-    reverse(arr,0,d-1);
+    reverse(arr,0,d-1);//we are using a custom reverse. standerd reverse uses the pointer.
     reverse(arr,d,n-1);
     reverse(arr,0,n-1);
     

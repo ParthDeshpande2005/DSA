@@ -137,7 +137,7 @@ void GCD_HCF(int n1,int n2){
     cout<<gcd;
 }
 
-void EquilateralAlgorithm(int a,int b){//to find hcf
+void EuclideanAlgorithm(int a,int b){//to find hcf
     //gcd(a,b)=gcd=(a%b,b)  a>b
     //this algorithm has lower time complexity that above gcd code
     while(a>0&&b>0)

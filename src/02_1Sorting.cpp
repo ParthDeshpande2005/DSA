@@ -34,7 +34,6 @@ void Bubble_Sort(int arr[],int n){
         if(didswap==0){
             break;
         }
-        // cout<<"runs"<<endl;
     }
 }
 
@@ -43,6 +42,7 @@ void Insertion_Sort(int arr[],int n){
     //you take an element and insert it into allready sorted left portion.
     for(int i=0;i<n;i++){//har bar arr[i] jitna part sort ho raha hai.first time 1 element fir 2 fir 3 and so on
         int j=i;
+        //j goes in reverse allways sorting the previous array.
         while(j>0 && arr[j-1]>arr[j]){
             //swap
             int temp=arr[j-1];
@@ -95,7 +95,7 @@ void Merge_Sort(vector<int> &arr,int low,int high){
 
 
 int Partitionele(vector<int> &arr,int low,int high){
-    int pivot=arr[low];
+    int pivot=arr[low]; //considering low as our pivot index.
     int i=low;
     int j=high;
     while(i<j){
@@ -120,6 +120,8 @@ void Quick_Sort(vector<int> &arr,int low,int high){
         Quick_Sort(arr,PIndex+1,high);
     }
 }   
+
+
 
 
 int main(){
