@@ -208,7 +208,7 @@ int trap(vector<int>& height) {
 
 
 // leetcode 907  HARD  VVIMP
-//see the edge case for repeat elements...IMP
+//see the edge case for repeat elements...IMP. we use >= in one and > in other. to avoid repeat count.
 const int MOD=1e9+7;
 //next smallest left. we are storing index.
 vector<int> NSL(vector<int>& arr){

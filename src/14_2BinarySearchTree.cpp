@@ -193,6 +193,10 @@ int kthSmallest(TreeNode* root, int k) {
     //then we sort the array  and return the k th smallest element.
         
 }
+//IMP->
+//we can even find kth largest->
+//we need to find total elements n.
+//then use kth smallest for n-k. to get kth largest.
 
 
 //leetcode 98 
@@ -218,6 +222,96 @@ bool isValidBST(TreeNode* root) {
     if(root==NULL) return true;
     return solve(root,LONG_MIN,LONG_MAX);
 }
+
+
+//leetcode 235
+//Lowest Common Ancestor of a Binary Search Tree->
+TreeNode* lca(TreeNode* node,TreeNode* p,TreeNode* q,int mini,int maxi){
+    if(node==NULL){
+        return NULL;
+    }
+
+    if(node->val>=mini && node->val<=maxi){
+        return node;
+    }
+
+    if(node->val>maxi){
+        return lca(node->left,p,q,mini,maxi);
+    }
+
+    return lca(node->right,p,q,mini,maxi);
+
+}
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    int mini=min(p->val,q->val);
+    int maxi=max(p->val,q->val);
+
+    return lca(root,p,q,mini,maxi);
+}
+
+
+//leetcode 1008->
+//my solution is createBST-> TC->O(n log n)
+TreeNode* createBST(int i,int j,vector<int>& preorder){
+    if(i>j){
+        return NULL;
+    }
+
+    TreeNode* parent=new TreeNode(preorder[i]);
+
+    //we will use binary search to find the index greater than and less than current.
+    int cur=preorder[i];
+    int low=i+1;
+    int high=j;
+    while(low<=high){
+        int mid=(low+high)/2;
+
+        if(preorder[mid]>cur){
+            high=mid-1;
+        }
+
+        else{
+            low=mid+1;
+        }
+    }
+    int x=high;
+
+    parent->left=createBST(i+1,x,preorder);
+
+    parent->right=createBST(x+1,j,preorder);
+
+    return parent;
+}
+TreeNode* build(int &cur,int bound,vector<int>& preorder){
+    if(cur==preorder.size() || preorder[cur]>bound) return NULL;
+
+    TreeNode* root=new TreeNode(preorder[cur]);
+    cur++;
+
+    root->left=build(cur,root->val,preorder);
+
+    root->right=build(cur,bound,preorder);
+        
+    return root;
+}
+TreeNode* bstFromPreorder(vector<int>& preorder) {
+   //optimal-> O(N)
+    int i=0;
+    return build(i,INT_MAX,preorder); //->here we are only considering upper bound as we travel complete left tree first hence there is no need of lower bound.
+
+    // //better 1->  tc->O(N log N)
+    // //my solution->
+    // int n=preorder.size();
+    // TreeNode* root=createBST(0,n-1,preorder);
+
+    // return root;
+
+
+    //better 2->  tc->O(N log N)+O(N)   sc->O(N)
+    //striver better->
+    // sort the preorder .sorting will give us inorder then use preorder and inorder to make a tree.
+}
+
 
 
 
