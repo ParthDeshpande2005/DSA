@@ -13,7 +13,7 @@ struct TreeNode{
     }
     TreeNode(int val1){
         val=val1;
-        left=nullptr;
+        left=NULL;
         right=nullptr;
     }
     TreeNode(int val1,TreeNode* left1,TreeNode* right1){
@@ -311,6 +311,82 @@ TreeNode* bstFromPreorder(vector<int>& preorder) {
     //striver better->
     // sort the preorder .sorting will give us inorder then use preorder and inorder to make a tree.
 }
+
+
+//Successor of a node in BST->
+int result;
+void successor_recursion(TreeNode* node,int key){
+    if(node==NULL){
+        return;
+    }
+
+    if(node->val > key){
+        result=node->val;
+        successor_recursion(node->left,key);
+    }
+
+    else{
+        successor_recursion(node->right,key);
+    }
+}
+int successor(TreeNode* root,int key){
+    result=-1;
+
+    successor_recursion(root,key);
+    
+    return result;
+}
+
+
+//Predecessor of a node in BST->
+TreeNode* predecessor(TreeNode* root,TreeNode* key){
+    TreeNode* pre=NULL;
+
+    while(root!=NULL){
+        if(root->val<key->val){
+            pre=root;
+            root=root->right;
+        }
+        else{
+            root=root->left;
+        }
+    }
+
+    return pre;
+}
+
+
+//leetcode 173->
+//using stack to store the node . 
+//at a particular time at max we are using O(h) space complexity. where h is the hight of the tree.
+//and next() and hasnext() is O(1) time complexity.
+class BSTIterator {
+public:
+    stack<TreeNode*> st;
+    void pushall(TreeNode* node){
+        while(node!=NULL){
+            st.push(node);
+            node=node->left;
+        }
+    }
+    BSTIterator(TreeNode* root) {
+        pushall(root);
+    }
+    
+    int next() {
+        if(st.empty()) return -1;
+        TreeNode* cur=st.top();
+        st.pop();
+
+        pushall(cur->right);
+
+        return cur->val;
+    }
+    
+    bool hasNext() {
+        return !st.empty();
+    }
+};
 
 
 

@@ -1,3 +1,44 @@
-Value 7 found in BST.
-Minimum value: 1
-Maximum value: 14
+Linked List: 1 2 3 4 5 
+Middle Node: 3
+
+Original List: 1 2 3 4 5 
+Reversed List: 5 4 3 2 1 
+
+Cycle Detected
+
+Cycle starts at node with value: 3
+
+Length of Loop = 3
+
+Original Linked List: 1 2 3 2 1 
+The linked list is a Palindrome.
+Linked List after function call: 1 2 3 2 1 
+
+Original Linked List: 1 2 3 4 5 6 
+After Odd-Even Rearrangement: 1 3 5 2 4 6 
+
+Original Linked List: 1 2 3 4 5 
+After removing 2th node from the end: 1 2 3 5 
+
+Original Linked List: 1 2 3 4 5 
+After deleting the middle node: 1 2 4 5 
+
+List 1: 1 2 4 
+List 2: 1 3 4 
+Merged Linked List: 1 1 2 3 4 4 
+
+Original Linked List: 4 2 1 3 5 
+Sorted Linked List: 1 2 3 4 5 
+
+Original Linked List: 1 0 2 1 0 2 1 0 
+Sorted Linked List: 0 0 0 1 1 1 2 2 
+
+List A: 4 1 8 4 5 
+List B: 5 6 1 8 4 5 
+Intersection Node Value: 8
+Original Number: 1 2 9 
+After Adding 1: 1 3 0 
+
+List 1: 2 4 3 
+List 2: 5 6 4 
+Sum: 7 0 8 

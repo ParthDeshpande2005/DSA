@@ -235,7 +235,7 @@ vector<int> rankinsorted(vector<int>&arr){
 }
 
 
-//leetcode 621
+//leetcode 621 IMP can also be done by greedy way. that method in 12_2
 //TC->O(N)
 int leastInterval(vector<char>& tasks, int n) {
     vector<int> freq(26,0);

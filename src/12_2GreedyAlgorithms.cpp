@@ -310,6 +310,35 @@ int eraseOverlapIntervals(vector<vector<int>>& intervals) {
 }
 
 
+
+//leetode 621 greedy solution.(not in int main)
+//watch mik video ...IMP 
+int leastInterval(vector<char>& tasks, int n) {
+    vector<int> freq(26,0);
+
+    for(char &ch: tasks){
+        freq[ch-'A']++;
+    }
+
+    sort(freq.begin(),freq.end());
+
+    int maxfreq=freq[25];
+    int gaddha=freq[25]-1;
+    int idealslots=gaddha*n;
+
+    for(int i=24;i>=0;i--){
+        idealslots-=min(gaddha,freq[i]);
+    }
+
+    if(idealslots>0){
+        return tasks.size()+idealslots;
+    }
+
+    return tasks.size();
+}
+
+
+
 int main(){
 
     vector<int> start={0,3,1,5,5,8};
