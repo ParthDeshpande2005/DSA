@@ -77,6 +77,121 @@ int countComponents(int V,vector<vector<int>> & edges){
 }
 
 
+//leetcode 994
+//I am using BFS...as we need level order traversal.
+//DFS is not allowed for this que..
+int orangesRotting(vector<vector<int>>& grid) {
+    int n=grid.size();
+    int m=grid[0].size();
+        
+    //first we will count the total fresh oranges as well as push the rotton oranges in the queue.
+    int fresh=0;
+    queue<pair<int,int>> que;
+    vector<vector<int>> visited(n,vector(m,0));
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]==1){
+                fresh++;
+            }
+            else if(grid[i][j]==2){
+                visited[i][j]=1;
+                que.push({i,j});
+            }
+        }
+    }
+
+    vector<vector<int>> directions={{0,1},{0,-1},{1,0},{-1,0}}; //up,down,right,left
+
+    //I will use BFS->
+    int steps=-1;
+    while(!que.empty()){
+        steps++;
+        int cur_size=que.size();
+
+        for(int k=0;k<cur_size;k++){ //we can completely avoid this loop by also storing the number of steps within the queue. we increase the steps while adding in the que...
+            pair<int,int> cur=que.front();
+            que.pop();
+
+            int i=cur.first;
+            int j=cur.second;
+
+            if(grid[i][j]==1){
+                fresh--;
+            }
+
+            for(auto dire:directions){
+
+                int newi=i+dire[0];
+                int newj=j+dire[1];
+
+                if(newi<0 || newj<0 || newi>=n || newj>=m){
+                    continue;
+                }
+                if(grid[newi][newj]==0 ||grid[newi][newj]==2){
+                    continue;
+                }
+                if(visited[newi][newj]==1){
+                    continue;
+                }
+                visited[newi][newj]=1;
+                que.push({newi,newj});
+
+            }
+        }
+    }
+
+    if(fresh>0) return -1;
+    if(steps==-1) return 0;
+    return steps;
+}
+
+//leetcode 733..
+//we can use both dfs as well as bfs.
+//I have used bfs.
+vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int color) {
+    int n=image.size();
+    int m=image[0].size();
+
+    vector<vector<int>> visited(n,vector(m,0));
+
+    queue<pair<int,int>> que;
+    que.push({sr,sc});
+    visited[sr][sc]=1;
+
+    vector<pair<int,int>> directions={{0,1},{0,-1},{1,0},{-1,0}};
+    int tempcolour=image[sr][sc];
+
+    while(!que.empty()){
+        pair<int,int> cur=que.front();
+        que.pop();
+        int i=cur.first;
+        int j=cur.second;
+        image[i][j]=color;
+
+        for(auto dir:directions){
+            int newi=i+dir.first;
+            int newj=j+dir.second;
+
+            if(newi<0 || newj<0 || newi>=n || newj>=m){
+                continue;
+            }
+
+            if(visited[newi][newj]==1){
+                continue;
+            }
+
+            if(image[newi][newj]!=tempcolour){
+                continue;
+            }
+
+            visited[newi][newj]=1;
+            que.push({newi,newj});
+        }
+    }
+
+    return image;
+}
 
 
 int main(){
