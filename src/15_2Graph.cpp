@@ -194,6 +194,121 @@ vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int co
 }
 
 
+//leetcode 200
+//lets use dfs for this problem..
+int n,m;
+vector<vector<int>> directions={{0,1},{0,-1},{1,0},{-1,0}};
+void dfs(int i,int j,vector<vector<char>>& grid,vector<vector<int>>& visited){
+    visited[i][j]=1;
+
+    for(auto dir:directions){
+        int newi=i+dir[0];
+        int newj=j+dir[1];
+
+        if(newi<0 || newj<0 || newi>=n || newj>=m){
+            continue;
+        }
+        if(visited[newi][newj]==1){
+            continue;
+        }
+        dfs(newi,newj,grid,visited);
+    }
+}
+int numIslands(vector<vector<char>>& grid) {
+    n=grid.size();
+    m=grid[0].size();
+
+
+    // we want all the 1's to get visited hence we will use a visited where all the 0's are allready marked.
+    vector<vector<int>> visited(n,vector(m,0));
+
+    // now we will mark all the 0 as visited
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]=='0'){
+                visited[i][j]=1;
+            }
+        }
+    }
+
+    int result=0;
+
+    //now we will implement the dfs->
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(visited[i][j]==1){
+                continue;
+            }
+            result++;
+
+            dfs(i,j,grid,visited);
+        }
+    }
+
+    return result;
+}
+
+
+
+//leetcode 1020..
+int numEnclaves(vector<vector<int>>& grid) {
+    //I will use bfs. first i will put all the border elements that are land in the que as well as i need to count the total numbers of 1. so we will make a queue of pair.i will also mark all the zeros as visied.
+
+    int n=grid.size();
+    int m=grid[0].size();
+
+    int count=0;
+    queue<pair<int,int>> que;
+    vector<vector<int>> visited(n,vector(m,0)); 
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(grid[i][j]==1){
+                count++;
+                if(i==0 || i==n-1 || j==0 || j==m-1){
+                    visited[i][j]=1;
+                    count--;
+                    que.push({i,j});
+                }
+            }
+            else{
+                visited[i][j]=1;
+            }
+        }
+    }
+        
+    vector<vector<int>> directions={{0,1},{0,-1},{1,0},{-1,0}};
+
+    while(!que.empty()){
+        auto cur=que.front();
+        que.pop();
+        int i=cur.first;
+        int j=cur.second;
+
+        for(auto dir:directions){
+            int newi=i+dir[0];
+            int newj=j+dir[1];
+
+            if(newi>=n || newj>=m || newi<0 || newj<0){
+                continue;
+            }
+
+            if(visited[newi][newj]==1) continue;
+
+            visited[newi][newj]=1;
+            count--;
+            que.push({newi,newj});
+        }
+    }
+    return count;
+}
+
+
+
+
+
+
 int main(){
 
     
