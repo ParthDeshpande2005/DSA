@@ -2,25 +2,42 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void prefixmax(int que[],int n){
-        int maxi=que[0];
-        for(int i=0;i<n;i++){
-            if(maxi<que[i]) maxi=max(maxi,que[i]);
-        }
-        cout<< n*maxi<<endl;
-    }
+
 
 int main(){
     int cnt;
     cin>>cnt;
     for(int i=0;i<cnt;i++){
-        int num;
-        cin>>num;
-        int arr[num];
-        for(int i=0;i<num;i++){
-            cin>>arr[i];
-        } 
-        prefixmax(arr,num);
+        int len;
+        cin>>len;
+        string str;
+        cin>>str;
+        
+        int cntzero=0;
+        for(int j=0;j<len;j++){
+            if(str[j]=='0'){
+                cntzero++;
+            }
+        }
+        int temp=cntzero;
+
+        int result=INT_MAX;
+        int cnt=0;
+        for(int k=0;k<len;k++){
+            if(str[k]=='0'){
+                cntzero--;
+            }
+            else if(str[k]=='1'){
+                result=min(result,cnt+cntzero);
+                cnt+=1;
+            }
+        }
+        if(str[0]=='1'){
+            cout<<temp<<endl;
+        }
+        else{
+            cout<<min(result,cnt)<<endl;
+        }
     }
     return 0;
 }

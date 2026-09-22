@@ -198,7 +198,7 @@ vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int co
 //lets use dfs for this problem..
 int n,m;
 vector<vector<int>> directions={{0,1},{0,-1},{1,0},{-1,0}};
-void dfs(int i,int j,vector<vector<char>>& grid,vector<vector<int>>& visited){
+void dfs2(int i,int j,vector<vector<char>>& grid,vector<vector<int>>& visited){
     visited[i][j]=1;
 
     for(auto dir:directions){
@@ -211,7 +211,7 @@ void dfs(int i,int j,vector<vector<char>>& grid,vector<vector<int>>& visited){
         if(visited[newi][newj]==1){
             continue;
         }
-        dfs(newi,newj,grid,visited);
+        dfs2(newi,newj,grid,visited);
     }
 }
 int numIslands(vector<vector<char>>& grid) {
@@ -242,7 +242,7 @@ int numIslands(vector<vector<char>>& grid) {
             }
             result++;
 
-            dfs(i,j,grid,visited);
+            dfs2(i,j,grid,visited);
         }
     }
 
@@ -303,6 +303,174 @@ int numEnclaves(vector<vector<int>>& grid) {
     }
     return count;
 }
+
+
+//leetcode 542
+//different appoarch IMP...
+
+int bfs(int i,int j,vector<vector<int>>& mat){
+    queue<vector<int>> que;
+    vector<vector<int>> visited(n,vector(m,0));
+    visited[i][j]=1;
+    que.push({i,j});
+    int cnt=0;
+    while(!que.empty()){
+        cnt++;
+        int size=que.size();
+        for(int k=0;k<size;k++){
+            auto cur=que.front();
+            que.pop();
+            int i=cur[0];
+            int j=cur[1];
+            for(auto dir:directions){
+                int newi=i+dir[0];
+                int newj=j+dir[1];
+
+                if(newi<0 || newj<0 || newi>=n || newj>=m){
+                    continue;
+                }
+
+                if(visited[newi][newj]==1) continue;
+
+                if(mat[newi][newj]==0){
+                    return cnt;
+                }
+
+                visited[newi][newj]=1;
+                que.push({newi,newj});
+            }
+        }
+    }
+    return cnt;
+}
+vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+
+    //optimal solution from striver..
+    // in optimal we start from every zero .and go out form the zero. and find distance for all the non visited elements in the mat.
+    n=mat.size();
+    m=mat[0].size();
+
+    queue<vector<int>> que;
+    vector<vector<int>> visited(n,vector(m,0));
+    vector<vector<int>> result(n,vector(m,0));
+
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(mat[i][j]==0){
+                que.push({i,j,0});
+                visited[i][j]=1;
+            }
+        }
+    }
+
+    while(!que.empty()){ //this is optimal way to apply bfs we avoid one extra for loop by maintaing a k variable.
+        auto cur=que.front();
+        que.pop();
+        int i=cur[0];
+        int j=cur[1];
+        int k=cur[2];
+            
+        result[i][j]=k;
+
+        for(auto dir: directions){
+            int newi=i+dir[0];
+            int newj=j+dir[1];
+
+            if(newi<0 || newj<0 || newi>=n|| newj>=m){
+                continue;
+            }
+
+            if(visited[newi][newj]==1){
+                continue;
+            }
+
+            visited[newi][newj]=1;
+            que.push({newi,newj,k+1});
+        }
+
+    }
+    return result;
+
+
+
+    //bruteforce---> in this I travel all the index and individual check for there distance using bfs
+    // n=mat.size();
+    // m=mat[0].size();
+
+    // //lets try the brute force first..
+    // vector<vector<int>> result(n,vector(m,0));
+
+    // for(int i=0;i<n;i++){
+    //     for(int j=0;j<m;j++){
+    //         if(mat[i][j]==0){
+    //             continue;
+    //         }
+    //         else{
+    //             //for 1 i will use bfs.. we cant use dfs as we need to travel to all adjacent node at once.
+    //             int cur=bfs(i,j,mat);
+    //             result[i][j]=cur;
+    //         }
+    //     }
+    // }
+    // return result;
+}
+
+
+//leetcode 130
+void solve(vector<vector<char>>& board) {
+    int n=board.size();
+    int m=board[0].size();
+
+    vector<vector<char>> result(n,vector(m,'X'));
+    queue<pair<int,int>> que;
+
+    //now just push all the border elements in the queue.
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            if(board[i][j]=='X') continue;
+            if(i==0 || j==0 || i==n-1 || j==m-1){ //only push the boarder 0.
+                result[i][j]='O';
+                que.push({i,j});
+            }
+        }
+    }
+
+    vector<vector<int>> directions={{0,1},{0,-1},{1,0},{-1,0}};
+
+    while(!que.empty()){
+        auto cur=que.front();
+        que.pop();
+        int i=cur.first;
+        int j=cur.second;
+
+        for(auto dir:directions){
+            int newi=i+dir[0];
+            int newj=j+dir[1];
+
+            if(newi<0 || newj<0 || newi>=n || newj>=m) {
+                continue;
+            }
+
+            if(board[newi][newj]=='X'){
+                continue;
+            }
+            if(result[newi][newj]=='O'){
+                continue;
+            }
+
+            //we only do O when the board allways have O.
+            que.push({newi,newj});
+            result[newi][newj]='O';
+        }
+    }
+
+    board=result;
+}
+
+
+
+
+
 
 
 
