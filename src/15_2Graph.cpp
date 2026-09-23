@@ -468,6 +468,88 @@ void solve(vector<vector<char>>& board) {
 }
 
 
+//IMP how we store the distinct insland.
+//we store the island in the set of vector of vector.. where vertor is all the cordinate that are in that island.
+//we normalize the island before storing them in set.
+//we normalize each pair by subtracting the base pair form them base pair is the pair form which we start the dfs.
+// in the end we return the size of set.
+class Solution
+{
+public:
+    
+    int n,m;
+    vector<vector<int>> dir={{1,0},{-1,0},{0,1},{0,-1}};
+    vector<pair<int,int>> dfs(int i,int j,vector<vector<int>>& grid,vector<vector<int>> &visited){
+        visited[i][j]=1;
+
+        vector<pair<int,int>> result;
+        result.push_back({i,j});
+
+        for(auto d:dir){
+            int newi=i+d[0];
+            int newj=j+d[1];
+
+            if(newi<0 || newj<0 || newi>=n || newj>=m){
+                continue;
+            }
+            if(visited[newi][newj]==1) continue;
+
+            vector<pair<int,int>> newv=dfs(newi,newj,grid,visited);
+
+            result.reserve(result.size()+newv.size());
+
+            result.insert(result.end(),newv.begin(),newv.end());
+
+        }
+
+        return result;
+    }
+    int countDistinctIslands(vector<vector<int>> &grid){
+        n=grid.size();
+        m=grid[0].size();
+
+        set<vector<pair<int,int>>> st;
+        queue<pair<int,int>> que;
+        vector<vector<int>> visited(n,vector(m,0));
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==0){ // I am marking all the 0 as visited.
+                    visited[i][j]=1;
+                }
+                else{
+                    que.push({i,j}); // I don't mark 1 as visited i only push them in the queue.
+                }
+            }
+        }
+
+        
+        while(!que.empty()){
+            auto cur=que.front();
+            que.pop();
+            int i=cur.first;
+            int j=cur.second;
+
+            if(visited[i][j]==1) continue;
+
+            vector<pair<int,int>> temp=dfs(i,j,grid,visited);
+
+
+            for(auto &a:temp){
+                a.first-=i;
+                a.second-=j;
+            }
+
+            sort(temp.begin(),temp.end());
+
+            st.insert(temp);
+        }
+
+
+
+        return st.size();
+    }
+};
 
 
 
