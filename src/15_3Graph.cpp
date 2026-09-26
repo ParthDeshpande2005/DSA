@@ -81,6 +81,50 @@ bool isCycle(int V, vector<int> adj[]) {
 }
 
 
+//leetcode 785
+// A graph is bipartite if the nodes can be partitioned into two independent sets A and B such that every edge in the graph connects a node in set A and a node in set B.
+//Return true if and only if it is bipartite.
+
+//striver explains the bipartite graph as the that can be colored using 2 colour and no adjacent node have same colour.
+
+//striver aslo gives observation that only the graph having odd length of loop/cycle will give false.
+//the graph that are liner or have even length loop/cycle is bipartite graph.
+
+//lets use dfs.
+int n2;
+vector<int> visited2;
+bool dfs2(int cur,int color,vector<vector<int>>& graph){
+    visited2[cur]=color;
+    cout<<cur<<" "<<color<<endl;
+    for(int it: graph[cur]){
+        if(visited2[it]!=-1){
+            if(visited2[it]==color){
+                return false;
+            }
+        }
+        else{
+            if(!dfs2(it,color^1,graph)){
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+bool isBipartite(vector<vector<int>>& graph) {
+    n2=graph.size();
+    visited2.resize(n2,-1); // initially we start with all color as -1 then we will assign two color as 0,1.
+
+        
+    for(int i=0;i<n2;i++){
+        if(visited2[i]!=-1) continue;
+        if(!dfs2(i,0,graph)){
+            return false;
+        } 
+    }
+
+    return true;
+}
 
 
 
