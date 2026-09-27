@@ -127,6 +127,91 @@ bool isBipartite(vector<vector<int>>& graph) {
 }
 
 
+//Topological Sort
+//this only works for DAG(directed acyclic graph)
+//using dfs solution
+stack<int> st;
+void dfstoposort(int cur,vector<int> adj[],vector<int> &visited){
+    visited[cur]=1;
+
+    for(auto it: adj[cur]){
+        if(visited[it]==1){
+            continue;
+        }
+
+        dfstoposort(it,adj,visited);
+    }
+
+    st.push(cur);
+}
+vector<int> topoSort(int V, vector<int> adj[]){
+    //M1 using DFS
+
+    vector<int> visited(V,0);
+
+    for(int i=0;i<V;i++){
+        if(visited[i]==1) {
+            continue;
+        }
+
+        dfstoposort(i,adj,visited);
+    }
+
+    vector<int> result;
+    while(!st.empty()){
+        result.push_back(st.top());
+        st.pop();
+    }
+
+    return result;
+}
+
+
+//Kahn's Algorithm for Topological Sort
+//IMP using a new thing Know as Indegree...IMP...
+//Watch striver video for better understanding.....
+
+//this only works for DAG(directed acyclic graph)
+//using bfs solution
+vector<int> topoSort(int V, vector<int> adj[]){
+    //M2 using Kahn's Algorithm.
+
+    vector<int> indegree(V,0); // this is the count of how many edges are directed towards ith node.
+
+    for(int i=0;i<V;i++){
+        for(auto it: adj[i]){
+            indegree[it]++;
+        }
+    }   
+
+    queue<int> que;
+
+    for(int i=0;i<V;i++){
+        if(indegree[i]==0){ //there will be allways someone with indegree 0 as it is a DAG.
+            que.push(i);
+        }
+    }
+
+    vector<int> result;
+
+    while(!que.empty()){
+        int node=que.front();
+        que.pop();
+
+        result.push_back(node);
+            
+        for(auto it:adj[node]){
+            indegree[it]--;
+            if(indegree[it]==0){
+                que.push(it);
+            }
+        }
+    }
+
+    return result;
+}
+
+
 
 
 
