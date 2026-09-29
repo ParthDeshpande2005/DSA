@@ -212,6 +212,109 @@ vector<int> topoSort(int V, vector<int> adj[]){
 }
 
 
+//leetcode 207
+//Dectect a cycle in directed graph using dfs.
+//IMP as the algorith used for the undirected graph will not work for this.
+//we will maintain two visited array to solve this .IMP..
+bool directed_dfs(vector<vector<int>>& prerequisites, int cur, vector<int> &visited, vector<int> &visitdfs){
+
+    visited[cur]=1;
+    visitdfs[cur]=1;
+
+    for(auto it: prerequisites[cur]){
+        if(visitdfs[it]==1){
+            return false;
+        }
+        if(visited[it]==1){
+            continue;
+        }
+        if(!directed_dfs(prerequisites,it,visited,visitdfs)){
+            return false;
+        }
+    }
+
+    visitdfs[cur]=0;
+
+    return true;
+
+}
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+    int n=numCourses;
+
+    vector<int> visited(n,0);
+    vector<int> visitdfs(n,0);
+
+    //making adj list
+    vector<vector<int>> adj(n);
+    for(int i=0;i<prerequisites.size();i++){
+        adj[prerequisites[i][1]].push_back(prerequisites[i][0]);
+    }
+
+    for(int i=0;i<n;i++){
+        if(visited[i]==1){
+            continue;
+        }
+
+        if(!directed_dfs(adj,i,visited,visitdfs)){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+//leetcode 207
+//Detect loop in directed Graph using BFS
+//here we will use kahn's Algorithm(topo sort) IMP...
+// if the topo sort has less than n elements we return fasle as there are multiple dependency meaing a loop . 
+//if the topo sort is of size n we return true.
+bool canFinish(int n, vector<vector<int>>& pre) {
+    //lets create adj list first
+    vector<vector<int>> adj(n);
+    for(int i=0;i<pre.size();i++){
+        adj[pre[i][1]].push_back(pre[i][0]);
+    }
+
+    //we will find the topo sort for the adj
+    vector<int> topo;
+    queue<int> que;
+    vector<int> indegree(n,0);
+
+    //create the indegree
+    for(int i=0;i<pre.size();i++){
+        indegree[pre[i][0]]++;
+    }
+
+    //we push all the elements with 0 indegree.
+    for(int i=0;i<n;i++){
+        if(indegree[i]==0){
+            que.push(i);
+        }
+    }
+
+    //now we will find the topo sort
+    while(!que.empty()){
+        int cur=que.front();
+        que.pop();
+        topo.push_back(cur);
+        for(auto it: adj[cur]){
+            indegree[it]--;
+            if(indegree[it]==0){
+                que.push(it);
+            }
+        }
+    }
+
+    if(topo.size()==n){
+        return true;
+    }
+    return false;
+
+}
+
+
+
 
 
 
