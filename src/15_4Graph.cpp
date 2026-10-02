@@ -55,6 +55,64 @@ vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
     return result;
 }
 
+//Method 2 is like using recursion not very much graph concept used.
+//leetcode 802 
+//using dfs we will use 2 visited a normal and one respect to the current dfs
+int dfs_SafeNode(int cur,vector<vector<int>>& graph,vector<int> &visited,vector<int> &dfsvisited,vector<int>& result){
+        
+    if(dfsvisited[cur]==1){
+        result[cur]=0;
+        return 0;
+    }
+
+    visited[cur]=1;
+    dfsvisited[cur]=1;
+
+    for(auto it: graph[cur]){
+        if(result[it]==0){
+            dfsvisited[cur]=0;
+            result[cur]=0;
+            return 0;
+        }
+        if(result[it]==2){
+            continue;
+        }
+
+        bool z=dfs_SafeNode(it,graph,visited,dfsvisited,result);
+        if(!z){
+            dfsvisited[cur]=0;
+            result[cur]=0;
+            return 0;
+        }
+    }
+
+    dfsvisited[cur]=0;
+    result[cur]=2;
+    return 2;
+}
+vector<int> eventualSafeNodesdfs(vector<vector<int>>& graph) {
+    int n=graph.size();
+    vector<int> result(n,1);
+    vector<int> visited(n,0);
+    vector<int> dfsvisited(n,0);
+
+    for(int i=0;i<n;i++){
+        if(visited[i]==1) continue;
+        dfs_SafeNode(i,graph,visited,dfsvisited,result);
+
+    }
+
+    //returning ans.
+    vector<int> ans;
+    for(int i=0;i<n;i++){
+        if(result[i]==2){
+            ans.push_back(i);
+        }
+    }
+
+    return ans;
+}
+
 
 
 //leetcode 207->Course Schedule 1
@@ -171,6 +229,7 @@ vector<int> findOrder(int num, vector<vector<int>>& pre) {
 //Alien Dictionary--> interesting que check the que on tuf or chatgpt
 //the challenge is to create the adj list
 //we need to use topo sort on the string.
+//ONE IMPROVEMENT I CAN MAKE IS THAT HERE I AM ALSO CONSIDERING DUPLICATE EDGES SO NEED TO AVOID THOSE FOR BETTER SOLUTION.
 bool dfstopo(int cur,vector<vector<int>> &adj,vector<int> &visited,vector<int> &dfsvisit,vector<int> &topo){
         
     if(dfsvisit[cur]==1) return false;
@@ -194,7 +253,7 @@ bool dfstopo(int cur,vector<vector<int>> &adj,vector<int> &visited,vector<int> &
     topo.push_back(cur);
     return true;
 }
-string findOrder(vector<string> &words) {
+string Alienlang(vector<string> &words) {
         
     int n=words.size();
         
@@ -283,6 +342,190 @@ string findOrder(vector<string> &words) {
     }
         
 }
+
+
+
+//MY SOLUTION NOT OPTIMAL
+//we need to find the shortest Path for each node from the sourse.//we are given a weighted DAG.
+//so each edge has given dist. 
+//N is the number of nodes and M is the number of edges.
+//I will use bfs.
+vector < int > shortestPathbfs(int N, int M, vector < vector < int >> & edges) {
+
+    //makeing adj list
+    vector<vector<pair<int,int>>> adj(N);
+    int n=edges.size();
+    for(int i=0;i<n;i++){
+        int prev=edges[i][0];
+        int next=edges[i][1];
+        int dist=edges[i][2];
+
+        adj[prev].push_back({next,dist});
+    }
+
+    vector<int> result(N,-1);
+
+    vector<int> visited(N,0);
+
+    queue<pair<int,int>> que; //this store cur node and level(distance form source).
+
+    que.push({0,0}); 
+    visited[0]=1;
+    result[0]=0;
+
+    while(!que.empty()){
+        pair cur=que.front();
+        que.pop();
+        int val=cur.first;
+        int dist=cur.second;
+
+        // result[val]=dist;
+
+        for(auto it: adj[val]){
+
+            int next=it.first;
+            int newdist=dist+it.second;
+
+            if(visited[next]==0){
+                que.push({next,newdist});
+                visited[next]=1;
+                result[next]=newdist;
+            }
+            else{ //meaing it is allready visited so i need to check if current dist is smaller.
+                if(newdist<result[next]){
+                    que.push({next,newdist});
+                    result[next]=newdist;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+
+//Now lets try the dfs for the prev que.This is also not optimal. but doing it for better understanding of graph and dfs.
+void dfsdist(int cur,int cur_dist,vector<int> &result,vector<vector<pair<int,int>>>& adj){
+    // result[cur]=cur_dist;
+
+    for(auto it: adj[cur]){
+        int next=it.first;
+        int newdist=it.second+cur_dist;
+
+        if(result[next]==-1){ //meaning the node is not visiied a single time
+            result[next]=newdist;
+            dfsdist(next,newdist,result,adj);
+        }
+        else{
+            if(newdist<result[next]){
+                result[next]=newdist;
+                dfsdist(next,newdist,result,adj);
+            }
+        }
+    }
+
+}
+vector < int > shortestPathdfs(int N, int M, vector < vector < int >> & edges) {
+
+    //making adj list
+    vector<vector<pair<int,int>>> adj(N);
+    int n=edges.size();
+    for(int i=0;i<n;i++){
+        int prev=edges[i][0];
+        int next=edges[i][1];
+        int dist=edges[i][2];
+
+        adj[prev].push_back({next,dist});
+    }
+
+    vector<int> result(N,-1);
+
+    result[0]=0;
+
+    dfsdist(0,0,result,adj);
+
+    return result;
+        
+}
+
+
+//optimal solution using topo sort time complexity is almost same but this is the standard appoarch to solve weitghted DAG.
+//we use topo sort and then perform relaxcation on the result array.
+void dfstopo(int cur,vector<int> &visited,stack<int>& topo,vector<vector<pair<int,int>>>& adj){
+    visited[cur]=1;
+
+    for(auto it:adj[cur]){
+        int next=it.first;
+        if(visited[next]==1){
+            continue;
+        }
+        dfstopo(next,visited,topo,adj);
+    }
+
+    topo.push(cur);
+}
+vector < int > shortestPath(int N, int M, vector < vector < int >> & edges) {
+
+    //making adj list
+    vector<vector<pair<int,int>>> adj(N);
+    int n=edges.size();
+    for(int i=0;i<n;i++){
+        int prev=edges[i][0];
+        int next=edges[i][1];
+        int dist=edges[i][2];
+
+        adj[prev].push_back({next,dist});
+    }
+
+    //step 1 we need to find the topo sort 
+    //we will use dfs to find the topo sort using the stack method
+    stack<int> topo;
+    vector<int> visited(N,0);
+
+    for(int i=0;i<N;i++){
+        if(visited[i]==1) continue;
+        dfstopo(i,visited,topo,adj);
+    }
+
+    //now step 1 is completed as we have the topo sort stored in the topo stack.
+
+    //step 2-> we will perform relaxcation we will start form the top of topo sort. 
+    //we will create a result array having all the distance form sourse initialize to -1. then we will assign the new distance.
+    //we travel in topological sort order so that when we are at a current node we know that all its parent node are visited so we can find the minium path for the current node.
+    
+    //as we need to start form source which is 0 in this case.
+    //we mark the result[0]=0 and other as INT_MAX so that allways we get the min distance form the source.
+
+    vector<int> result(N,INT_MAX);
+    result[0]=0;
+
+    while(!topo.empty()){
+        int cur=topo.top();
+        topo.pop();
+
+        if(result[cur]==INT_MAX) continue; //we skip all the node who are not connected to zero.
+
+        for(auto it: adj[cur]){
+            int next=it.first;
+            long long nextdist=it.second+result[cur];
+
+            if(nextdist<result[next]){
+                result[next]=nextdist;
+            }
+        }
+
+    }
+
+    //marking all the nodes that can not be visited as -1.
+    for(int i=0;i<N;i++){
+        if(result[i]==INT_MAX){
+            result[i]=-1;
+        }
+    }
+
+    return result;
+}
+
 
 
 int main(){
