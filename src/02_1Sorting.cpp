@@ -122,6 +122,36 @@ void Quick_Sort(vector<int> &arr,int low,int high){
 }   
 
 
+void Radix_Sort(vector<int> &arr){
+    
+    int n=arr.size();
+
+    int longestelement= *max_element(arr.begin(),arr.end());
+
+    int len_of_longest=log10(abs(longestelement))+1;
+
+
+    for(int i=0;i<len_of_longest;i++){
+        vector<int> temp_vector;
+        vector<vector<int>> bin(10);
+        int power=pow(10,i);
+        for(int ind=0;ind<n;ind++){
+            int valtemp=arr[ind];
+            
+            int position=(valtemp/power)%10;
+
+            bin[position].push_back(arr[ind]);
+        }
+
+        for(auto it:bin){
+            for(auto k:it){
+                temp_vector.push_back(k);
+            }
+        }
+
+        arr=temp_vector;
+    }
+}
 
 
 int main(){
@@ -148,8 +178,17 @@ int main(){
     for(int i=0;i<n;i++){
         cout<<arrvec[i]<<" ";//print arrvec or arr according to the sorting algorithm used.
     }
+    cout<<endl;
+
+
+    vector<int> radix={234,146,259,348,152,163,235,48,36,62};
+    Radix_Sort(radix);
+    for(auto it:radix){
+        cout<<it<< " ";
+    }
 
     return 0;
+
 }
 
 /*input-> for selection,bubble,insertion.

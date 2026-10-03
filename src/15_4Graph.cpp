@@ -527,6 +527,48 @@ vector < int > shortestPath(int N, int M, vector < vector < int >> & edges) {
 }
 
 
+//we need to find shortest path from source to all node in undirected graph with unit weight. 
+//meaning all the edges have a weight of 1.
+//one improvement can be done is to avoid visited as we can consider the result vector to check if the index is visited or not
+vector<int> shortestPath(vector<vector<int>>& edges, int N,int M){
+    //lets try bfs
+    // we only visit one path once as it will be shorted due to bfs
+
+    // lets create the adjancy list
+    vector<vector<int>> adj(N);
+    for(int i=0;i<M;i++){
+        adj[edges[i][0]].push_back(edges[i][1]);
+        adj[edges[i][1]].push_back(edges[i][0]);
+    }
+
+    vector<int> visited (N,0);
+    queue<pair<int,int>> que;
+
+    que.push({0,0});
+    visited[0]=1;
+    vector<int> result(N,-1);
+        
+    while(!que.empty()){
+        pair<int,int> cur=que.front();
+        int dist=cur.second;
+        int ind=cur.first;
+        result[ind]=dist;
+
+        que.pop();
+
+        for(auto it: adj[ind]){
+            if(visited[it]==0){
+                visited[it]=1;
+                que.push({it,dist+1});
+            }
+        }
+    }
+
+    return result;
+}
+
+
+
 
 int main(){
 
