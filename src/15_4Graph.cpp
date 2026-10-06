@@ -567,7 +567,211 @@ vector<int> shortestPath(vector<vector<int>>& edges, int N,int M){
     return result;
 }
 
+//leetcode 127 Word Ladder 1
+//very different appoarch as we are storing all the word list in set for faster traversal .
+//we try to find all the possiblity from a to z for a particular character and than check if it is available in the set.
+int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        
+    queue<pair<string,int>> que;
+    que.push({beginWord,1});
+    unordered_set<string> st(wordList.begin(),wordList.end());
+    if(st.find(beginWord)!=st.end()){
+        st.erase(beginWord);
+    }
 
+    while(!que.empty()){
+        string word=que.front().first;
+        int steps = que.front().second;
+
+        que.pop();
+
+        if(word == endWord) return steps;
+
+        for(int i=0;i<word.size();i++){
+            char original = word[i];
+            for(char ch= 'a';ch<='z';ch++){
+                word[i]=ch;
+                if(ch==original) continue;
+                if(st.find(word)!=st.end()){
+                    st.erase(word);
+                    que.push({word,steps+1});
+                }
+            }
+            word[i]=original;
+        }
+
+    }
+    return 0;
+}
+
+
+//leetcode 126
+//striver method 1 IMP->> we also store the sequence in the queue to return the sequence.
+vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+    //we will implement the simmilar idea as word ladder 1
+    //but we will not remove from the set as soon as we use. as we will travel in level. 
+    //as in level the the word can be used multiple times.
+    //for better understanding watch striver video.
+
+    //lets create a set
+    unordered_set<string> st(wordList.begin(),wordList.end());
+
+    //makeing the queue
+    queue<vector<string>> que; //que will store the complete sequence.
+    que.push({beginWord});
+
+    //storing result;
+    vector<vector<string>> result;
+
+    while(!que.empty()){   
+
+        int size =  que.size();
+        unordered_set<string> del;
+        bool found = false; //this flag is used to break out of the while so we only calculate for shortest length.
+
+        for(int k=0;k<size;k++){
+            vector<string> cur = que.front(); 
+            string back = cur.back();
+
+            que.pop();
+
+            if(back == endWord){ //we found a shortes valid path.
+                result.push_back(cur);
+                found = true;
+                continue;
+            }
+
+            string original = back;
+            for(int i=0;i<back.size();i++){ //checking for all index of back
+                    
+                back =  original;
+                for(char ch='a';ch<='z';ch++){ //checking for all character at a particular index.
+                    back[i]=ch;
+
+                    if(original[i] == ch){
+                        continue;
+                    }
+
+                    if(st.find(back)!=st.end()){
+                        cur.push_back(back);
+                        del.insert(back); //--> this is used to delete after the level is complete.
+                        que.push(cur);  
+                        cur.pop_back(); // we pop back as we don't need next element in this level.
+                    }
+                }
+            }
+        }
+
+        for(auto it:del){ //we remove the used element after the level is complete as multiple path can have same word in them so we remove at end.
+            st.erase(it);
+        }
+
+        del.clear(); //we clear so we don't get reapat value and also same time. 
+             
+        if(found){ //if the solution is found at this level there is no need to check for next level..
+            break;
+        }
+    }   
+    return result;
+}
+
+
+//leetcode 126
+//striver method 2 -> Optimal solution IMP for CP(competetive programming) 
+//striver mentions that the previous solution is completely fine for the interview. 
+//Method 2 Optimal Appoarch..
+//this is purely for competitive programming appoarch.
+//we do a lot of precomputaion 
+//we calculate the minium number of step to reach the lastWord using the word ladder 1 method.
+//we also use a map to store which element occur at which level.
+//after all precomputation we start from the endWord and go towards the beginWord
+//going in reverse avoid all the uncessary computations.
+vector<vector<string>> result;
+unordered_map<string,int> mpp;
+void dfs(string cur,vector<string> compute,string beginWord){
+        
+    if(cur==beginWord){
+        reverse(compute.begin(),compute.end());
+        result.push_back(compute);
+        return ;
+    }
+
+    string org = cur;
+    for(int i=0;i<cur.size();i++){
+        
+        cur=org;
+        for(char ch = 'a';ch<='z';ch++){
+            cur[i]=ch;
+
+            if(mpp.find(cur)!=mpp.end()){
+                if(mpp[cur] + 1 == mpp[org]){
+                    compute.push_back(cur);
+                    dfs(cur,compute,beginWord);
+                    compute.pop_back();
+                }
+            }
+        }
+    }
+}
+vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        
+    //Step 1 Precompute-->
+    mpp[beginWord]=1;
+
+    int shortest_len=1;
+
+    unordered_set<string> st(wordList.begin(),wordList.end());
+    st.erase(beginWord);
+
+    queue<string> que;
+    que.push(beginWord);
+    bool flag = false;
+
+    while(!que.empty()){
+
+        int size = que.size();
+        for(int k=0;k<size;k++){
+            string cur =  que.front();
+            que.pop();
+
+            if(cur==endWord){
+                mpp[cur]=shortest_len;
+                flag=true;
+                continue;
+            }
+
+            string original =  cur;
+
+            for(int i=0;i<cur.size();i++){
+                cur=original;
+                for(char ch='a';ch<='z';ch++){
+                    cur[i] = ch;
+                    if(st.find(cur)!= st.end()){
+                        que.push(cur);
+                        st.erase(cur);
+                        mpp[cur]=shortest_len+1;
+
+                        if(cur==endWord){
+                            flag=true;
+                        }
+                    }
+                }
+            }
+        }
+        if(flag){
+            break;
+        }
+           
+        shortest_len++;
+            
+    }
+
+    if(flag == false) return {};
+
+    dfs(endWord,{endWord},beginWord);
+
+    return result;
+}
 
 
 int main(){
