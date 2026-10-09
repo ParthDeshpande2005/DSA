@@ -162,7 +162,110 @@ vector<int> shortestPath(int n, int m, vector<vector<int>> &edges) {
 
 
 
+//leetcode 1091
+//i was first using dijkstra but here weight is constant 1. so there is no need for the priority queue. as the queue will be allready sorted.
+int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+    int n = grid.size();
 
+    // priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq; 
+    // --> not using pq
+
+    queue<pair<int,pair<int,int>>> que;
+
+    if(grid[0][0]==1) return -1;
+
+    que.push({1,{0,0}}); //we store dist,{i,j} in the priority queue.
+
+    vector<pair<int,int>> directions = {{0,1},{0,-1},{1,0},{-1,0},{1,1},{-1,1},{1,-1},{-1,-1}};
+
+    vector<vector<int>> distance(n,vector(n,-1));
+    distance[0][0]=1;
+
+    while(!que.empty()){
+        auto cur = que.front();
+        que.pop();
+
+        int dist = cur.first;
+        int i = cur.second.first;
+        int j = cur.second.second;
+
+        for(auto dir : directions){
+            int newi = dir.first+i;
+            int newj = dir.second+j;
+
+            if(newi>=n || newj>=n || newi<0 || newj<0){
+                continue;
+            }
+
+            if(grid[newi][newj]==1){
+                continue;
+            }
+
+            if(distance[newi][newj]==-1){
+                distance[newi][newj] = dist+1;
+                que.push({dist+1,{newi,newj}});
+            }
+            else if(distance[newi][newj] > dist+1){
+                distance[newi][newj] = dist+1;
+                que.push({dist+1,{newi,newj}});
+            }
+        }
+    }
+    return distance[n-1][n-1];
+}
+
+
+
+//leetcode 1631
+//lets use dijkstra.
+int minimumEffortPath(vector<vector<int>>& heights) {
+        
+    int n = heights.size();
+    int m = heights[0].size();
+
+    //effort 
+    vector<vector<int>> effort(n,vector<int>(m,-1));
+    effort[0][0]=0;
+
+    //priority_queue  --> min heap.
+    priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
+
+    pq.push({0,{0,0}});
+
+    //4 directions up,down,rigth,left.
+    vector<pair<int,int>> directions = {{0,1},{0,-1},{1,0},{-1,0}};
+        
+    while(!pq.empty()){
+        int dist = pq.top().first;
+        int i = pq.top().second.first;
+        int j = pq.top().second.second;
+
+        if(i == n-1 && j== m-1){
+            break;
+        }
+
+        pq.pop();
+
+        for(auto dir:directions){
+            int newi = i+dir.first;
+            int newj = j+dir.second;
+
+            if(newi<0 || newj<0 || newi>=n || newj>=m){
+                continue;
+            }
+
+            int dist2 = abs(heights[newi][newj] - heights[i][j]);
+            int newdist = max(dist , dist2);
+
+            if(effort[newi][newj]==-1 || newdist < effort[newi][newj]){
+                effort[newi][newj]=newdist;
+                pq.push({newdist,{newi,newj}});
+            }
+        }
+    }
+
+    return effort[n-1][m-1];
+}
 
 
 
