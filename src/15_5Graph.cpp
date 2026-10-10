@@ -268,6 +268,66 @@ int minimumEffortPath(vector<vector<int>>& heights) {
 }
 
 
+//leetcode 787
+//IMP...
+//here we use modified dikstra.
+//very different appoarch compared previous dijkstra implementations
+//we use the stops int as the first index in out prioriority queue instead of shortes distance.
+//we maintain the distace array where we decrease the distance accordingly.
+//we need only queue and not pq as the stop constantly increase by 1 only.
+//we can go till max k+1 stop as the distance being the k+1th stop.
+//we don't include the stops greater than k+1 in our queue.
+int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dstination, int k) {
+        
+    int size = flights.size();
+
+    //first lets create the adj list
+    vector<vector<pair<int,int>>> adj(n);
+    for(int i=0;i<size;i++){
+        adj[flights[i][0]].push_back({flights[i][1],flights[i][2]}); //we store the next and the distance to reach it.
+    }
+
+    //queue
+    queue<tuple<int,int,int>> que; // stops,node,dist
+    que.push({0,src,0});
+
+    //distance vector
+    vector<int> dist(n,-1);
+    dist[src]=0;
+
+
+    while(!que.empty()){
+        auto cur = que.front();
+        int stops = get<0>(cur);
+        int node = get<1>(cur);
+        int distance = get<2>(cur);
+
+        que.pop();
+
+        for(auto it:adj[node]){
+            int nextdist = it.second;
+            int next = it.first;
+                
+            int newdist = nextdist + distance;
+
+            if(stops > k){ //we dont the flite path that take more than k stops.
+                continue;
+            }
+
+            if(dist[next] ==  -1 || dist[next] > newdist){
+                dist[next] = newdist;
+                que.push({stops+1,next,newdist});
+            }
+        }
+    }
+
+    return dist[dstination];
+}
+
+
+
+
+
 
 
 
