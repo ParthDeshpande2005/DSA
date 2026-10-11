@@ -325,7 +325,47 @@ int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dstinati
 }
 
 
+//IMP... observation   as well as this que is designed by striver when he was intern at geeksforgeeks.
+//not on leetcode --> see que at striver website.. 
+//we have an important observation from striver -->
+//we ovserve that the node number can be between 0 and 99999. as we mod as soon we go above 100000.
+//as the number will get mod.
+//so we will use simple dijkstra where we will keep track of the 99999 nodes according to distance.
+int minimumMultiplications(vector<int> &arr, int start, int end) {
+    int n = arr.size();
 
+    //distance array
+    vector<int> dist(99999,-1);
+    dist[start]=0;
+
+    //no need for the priority queue as the node are increasing by 1 at each step.
+    queue<pair<int,int>> que;
+    que.push({0,start});
+
+    while(!que.empty()){
+        int dist2=que.front().first;
+        int node=que.front().second;
+
+        if(node == end){
+            return dist2;
+        }
+
+        que.pop();
+
+        for(int i=0;i<n;i++){
+            int newnode = node*arr[i];
+            newnode = newnode % 100000;
+
+            if(dist[newnode]==-1 || dist[newnode]>dist2+1){
+                dist[newnode]=dist2+1;
+                que.push({dist2+1,newnode});
+            }
+        }   
+    }
+
+    return dist[end];
+    
+}
 
 
 

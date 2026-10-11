@@ -389,6 +389,109 @@ public:
 };
 
 
+//imp que different appoarch it is form striver website 
+//takeUforward 808.Depth of BST Given Insertion Order
+//Method 1-> O(n^2)
+//first method we use by construction the BST and then adding one by one  and at the same time calculating the max depth.
+//this gives TLE
+int maxlen = 0;
+TreeNode* insert(TreeNode* root,int val){
+    TreeNode* insertval = new TreeNode(val);
+
+    if(root == NULL) {
+        maxlen = max(maxlen,1);
+        return insertval; //if no root is present.
+    }
+
+    TreeNode* temp = root;
+    TreeNode* prev = root;
+
+    int len = 1;
+    while(temp != NULL){
+        if(val > temp -> val){
+            len = len + 1;
+            prev=temp;
+            temp = temp->right;
+        }
+        else{
+            len = len + 1;
+            prev = temp;
+            temp = temp->left;
+        }
+    }
+
+    if(val>prev->val){
+        prev->right = insertval;
+    }
+    else{
+        prev->left=insertval;
+    }
+
+    maxlen = max(maxlen,len);
+    return root;
+}
+int maxDepthBST(vector<int>& order) {
+    //lets make the binary search tree to solve this queue.
+    int n = order.size();
+    TreeNode* root = NULL;
+    for(int i=0;i<n;i++){
+        root = insert(root,order[i]);
+    }
+    return maxlen;
+}
+
+//Method 2 IMP .
+//we wont use an actual BST in this que.
+//we maintain a datastructure that contains the lenght of the previously occured elements.
+//we find the length of the new element by 1+max(depth(p),depth(s))
+//where p is the closest inserted value smaller than our current.
+//and s is closet inserted value larger than our current.
+int maxDepthBST2(vector<int> & order){
+    int n = order.size();
+
+    set<int> st;
+    vector<int> depth(n+1,0);
+
+    int maxdepth = 0;
+
+    for(int i=0;i<n;i++){
+        int cur = order[i];
+
+        //we need to find the closest inserted value larger than the cur.
+        //we will use lower_bound for this.as the cur val is not included yet so it will give only next greater val.
+
+        //we also need to find the closest inserted value smaller than the cur.
+        
+        auto it = st.lower_bound(cur); //lower_bound gives pointer.
+
+        int predDepth = 0;
+        int succDepth = 0;
+
+        if(it != st.end()){
+            succDepth = depth[*it];
+        }
+
+        if(it != st.begin()){
+            auto previt = prev(it); //to get upperbound.
+            predDepth = depth[*previt];
+        }
+
+        int curdepth = 1 + max(predDepth,succDepth);
+        
+        depth[cur] = curdepth;
+
+        maxdepth = max(maxdepth,curdepth);
+
+        st.insert(cur);
+    }
+    return maxdepth;
+}
+
+
+
+
+
+
 
 
 int main(){
