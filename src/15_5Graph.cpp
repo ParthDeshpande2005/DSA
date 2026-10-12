@@ -368,6 +368,59 @@ int minimumMultiplications(vector<int> &arr, int start, int end) {
 }
 
 
+//leetcode 1976
+//IMP....
+//we use dijksta along with the number of ways array 
+//the number of ways array will count the number of ways to reach the current node with the minium movies.
+using ll = long long;
+int MOD=1e9+7;
+int countPaths(int n, vector<vector<int>>& roads) {
+
+    //making the adj list
+    vector<vector<pair<int,int>>> adj(n);
+    for(int i=0;i<roads.size();i++){
+        adj[roads[i][0]].push_back({roads[i][1],roads[i][2]});
+        adj[roads[i][1]].push_back({roads[i][0],roads[i][2]});
+    }
+
+    //priority queue. min heap
+    priority_queue<pair<ll,int>,vector<pair<ll,int>>,greater<pair<ll,int>>> pq;
+    pq.push({0,0}); //stores the distance and the node to that distance form 0.
+
+    //distace array
+    vector<long long> distance(n,-1);
+    distance[0]=0;
+
+    //ways array
+    vector<long long> ways(n,0);
+    ways[0]=1;
+
+    while(!pq.empty()){
+        ll curdist = pq.top().first;
+        int node = pq.top().second;
+
+        pq.pop();
+
+        for(auto it : adj[node]){
+            int nextnode = it.first;
+            ll nextdist = it.second;
+
+            long long newdist = 0LL + curdist + nextdist;
+
+            if(distance[nextnode]==-1 || distance[nextnode]>newdist){
+                distance[nextnode] = newdist;
+                ways[nextnode] = ways[node]% MOD;
+                pq.push({newdist,nextnode});
+            }
+            else if(distance[nextnode] == newdist){
+                ways[nextnode] = (ways[nextnode] + ways[node])% MOD ;
+            }
+        }
+    }
+
+    return ways[n-1];
+}
+
 
 
 
