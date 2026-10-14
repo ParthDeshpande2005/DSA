@@ -1,7 +1,11 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//Shortest Path Algorithms... all this algo work for directed as well as undirected graph...
+
 //Dijkstra  -> IMP this algo does not work for negative weight and negative cycles
+//Belman Ford -> can be used on graph containing cycle. this algorithm is also used to find the negative cycle in graph.
+//Floyd warshall -> Multisource shortes path algorithm. also help to detect negative cycle.
 
 
 //Method 1 using priority queue.
@@ -420,6 +424,96 @@ int countPaths(int n, vector<vector<int>>& roads) {
 
     return ways[n-1];
 }
+
+
+
+//bellman ford algorithm-->
+
+//this algo is used to find the shortes path.
+//the advantage is that we are also able to find dist for directed graph with negative edges weights 
+//we are also able to find if negative cycle is present or not.
+//this is not valid for negative cycle graph(where a loop weight is less than 0 giving us smaller distance we travel in the cycle.)
+//we do relaxication for n-1 times where n=no.of nodes(vertices)
+//we also dont need the adjancy list like before we can directly apply this algo on the edges vector<vector<int>> given .
+vector<int> bellman_ford(int V, vector<vector<int>>& edges, int S) {
+    int n = edges.size();
+
+    //dist vector
+    vector<int> dist(V,1e9);
+    dist[S] = 0;
+
+    for(int k = 0;k < V-1;k++){ //outher loop that runs for 
+        for(int i = 0;i<n;i++){
+            int start = edges[i][0];
+            int end  = edges[i][1];
+            int weight = edges[i][2];
+
+            if(dist[start]==1e9){
+                continue;
+            }
+
+            int newdist = dist[start]+weight;
+            if(dist[end] > newdist){
+                dist[end] = newdist;
+            }
+        }
+    }
+
+    //now we wil see if there is a neagative cycle
+    for(int i=0;i<n;i++){
+        int start = edges[i][0];
+        int end = edges[i][1];
+        int weight = edges[i][2];
+
+        if(dist[start]==1e9){
+            continue;
+        }
+
+        if(dist[end] > dist[start]+weight){
+            return {-1};
+        }
+    }
+    return dist;
+}
+
+
+//Floyd warshall algorithm IMP.. 
+//multisource shortes path algorithm.we start with multiple source and find dist till all the other nodes.
+//we use the kind of DP to solve this problem.
+//we start from each node starting i form 0 to nth node and find dist for all the other node again and again by considering that we are traveling from the ith node. 
+//so our path becomes dist[start][i]+dist[i][end] 
+//we go no updating distace when it is lower than current dist.
+//also we can check negative cycle by cheacking if dist[i][i]<0. 
+//as dist form node to itself needs to be 0.
+//this problem does not have any negative cycle but i will still check for understanding in future.
+void shortestDistance(vector<vector<int>>&matrix) {
+    int n = matrix.size();
+
+    for(int middle=0;middle<n;middle++){
+
+        for(int start=0;start<n;start++){
+            //check for negative cycle
+            // if(matrix[start][start]<0){
+            //     //this is not asked to check in que so i am commiting it out
+            //     //but this is the way to check if there is a negative cycle.
+            // }
+            for(int end=0;end<n;end++){
+                    
+                //when dist is infinite.
+                if(matrix[start][middle]==-1 || matrix[middle][end]==-1){
+                    continue;
+                }
+
+                int newdist = matrix[start][middle] + matrix[middle][end];
+                if(matrix[start][end]==-1 || matrix[start][end]>newdist){
+                    matrix[start][end] = newdist;
+                }
+            }
+        }
+    }
+}
+
+
 
 
 
