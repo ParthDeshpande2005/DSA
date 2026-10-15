@@ -515,6 +515,67 @@ void shortestDistance(vector<vector<int>>&matrix) {
 
 
 
+//leetcode 1334.Find the City With the smallest Number of Neighbors at a Threshold Distance.
+//we will use Floyd warshall algorithm to solve this question.as there are multiple sources.
+int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+    //making the adjancy matrix form the edges.
+    vector<vector<int>> matrix(n,vector<int>(n,-1));
+
+    for(int i=0;i<edges.size();i++){
+        int node1 = edges[i][0];
+        int node2 = edges[i][1];
+        int weight = edges[i][2];
+
+        matrix[node1][node2]=weight;
+        matrix[node2][node1]=weight;
+    }
+
+    //now applying floyd warshall algo.
+
+    for(int k = 0;k < n;k++){
+
+        for(int start = 0;start < n;start++){
+            if(matrix[start][k]==-1){
+                continue;
+            }
+            for(int end = 0;end < n;end++){
+                if(matrix[k][end]==-1){
+                    continue;
+                }
+
+                int newdist = matrix[start][k]+matrix[k][end];
+
+                if(matrix[start][end]==-1 || matrix[start][end]>newdist){
+                    matrix[start][end] = newdist;
+                }
+            }
+        }
+    }
+    int ans=0;
+    int result = n+1;
+    for(int i = 0;i<n;i++){
+        int temp=0;
+        for(int j=0;j<n;j++){
+            if(i==j) {
+                continue;
+            }
+            if(matrix[i][j]==-1){
+                continue;
+            }
+            if(matrix[i][j]<=distanceThreshold){
+                temp++;
+            }
+        }
+        if(temp<=result){
+            result = temp;
+            ans = i;
+        }
+    }
+
+    return ans;
+}
+
+
 
 
 
