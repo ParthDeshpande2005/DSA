@@ -576,6 +576,112 @@ int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
 }
 
 
+//leetcode 743
+//lets do this using dijkstra..
+int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+
+    //making the adjancy list.
+    vector<vector<pair<int,int>>> adj(n+1);
+    for(int i=0;i<times.size();i++){
+        adj[times[i][0]].push_back({times[i][1],times[i][2]});
+    }
+
+    //dist array 
+    vector<int> dist(n+1,-1);
+    dist[k]=0;
+
+    //priority queue
+    priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+    pq.push({0,k});
+
+    while(!pq.empty()){
+        int weight = pq.top().first;
+        int cur_node = pq.top().second;
+
+        pq.pop();
+
+        for(auto it:adj[cur_node]){
+            int next_node = it.first;
+            int next_weight = it.second;
+                
+            int newdist = weight + next_weight;
+
+            if(dist[next_node] == -1 || dist[next_node]>newdist){
+                dist[next_node]=newdist;
+                pq.push({newdist,next_node});
+            }
+        }
+    }
+
+    int result = dist[k];
+    for(int i=1;i<=n;i++){
+        if(dist[i]==-1){
+            return -1;
+        }
+        else{
+            result = max(result,dist[i]);
+        }
+    }
+
+    return result;
+}
+
+
+
+//leetcode 778.
+//we need to minimize the maximum element found on the path.
+//here we don't to find the shortest path. 
+//so in the priority queue we will not store the the dist instead we will store the max element found on the path.
+int swimInWater(vector<vector<int>>& grid) {
+    //lets try using dijkstra
+
+    int n = grid.size();
+        
+    //priority queue
+    priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>,greater<pair<int,pair<int,int>>>> pq;
+    pq.push({grid[0][0],{0,0}}); //here the dist is the value of the grid.
+
+    //dist arrray
+    vector<vector<int>> dist(n,vector<int>(n,-1));
+    dist[0][0] = grid[0][0];
+
+    //directions
+    vector<vector<int>> directions = {{0,1},{0,-1},{1,0},{-1,0}};
+
+    while(!pq.empty()){
+        int cur_dist = pq.top().first;
+        int i = pq.top().second.first;
+        int j =pq.top().second.second;
+
+        if(i == n-1 && j == n-1){
+            return cur_dist;
+        }
+
+        pq.pop();
+
+        for(auto dir:directions){
+            int newi = i+dir[0];
+            int newj = j+dir[1];
+
+            if(newi<0 || newj<0 || newi>=n || newj>=n){
+                continue;
+            }
+
+            int newdist = max(cur_dist,grid[newi][newj]);
+
+            if(dist[newi][newj]==-1 || dist[newi][newj]>newdist){
+                dist[newi][newj] = newdist;
+                pq.push({newdist,{newi,newj}});
+            }
+        }
+    }
+
+    return dist[n-1][n-1];
+}
+
+
+
+
 
 
 

@@ -1,3 +1,9 @@
+// Segment Tree -->
+// an efficient data structure that allows 
+// efficient querying of intervals/range
+// efficient updating of intervals/range
+
+
 #include<bits/stdc++.h>
 using namespace std;
 
