@@ -268,8 +268,139 @@ vector<int> numOfIslands(int n, int m, vector<vector<int>> &A){
 
 
 
+//leetcode 827
+class djs{
+public:
+    vector<int> parent;
+    vector<int> islandsize;
+
+    djs(int matrixsize){
+        islandsize.resize(matrixsize,1);
+        parent.resize(matrixsize,0);
+        for(int i=0;i<matrixsize;i++){
+            parent[i] = i;
+        }
+    }
+
+    int findUpar(int node){
+        if(parent[node] == node){
+            return node;
+        }
+
+        return parent[node] = findUpar(parent[node]);
+    }
+
+    int findsize(int node){
+        int ultnode = findUpar(node);
+        return islandsize[ultnode];
+    }
+
+    void unionbysize(int newnode,int prevnode){
+        int ultnew = findUpar(newnode);
+        int ultprev = findUpar(prevnode);
+
+        if(ultnew == ultprev){
+            return;
+        }
+
+        parent[ultprev] = ultnew;
+        islandsize[ultnew] += islandsize[ultprev];
+    }
+};
+class largestIslandSolution {
+public:
+    int largestIsland(vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        int matrixsize = n*m;
+
+        djs ds(matrixsize);
+
+        vector<vector<int>> directions = {{1,0},{0,1},{-1,0},{0,-1}}; 
+        vector<vector<int>> upleft = {{0,-1},{-1,0}}; //only check for up and left
+
+        int intialsize = 0;
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==0){
+                    continue;
+                }
+                
+                int newnode = i*m + j;
+
+                for(auto it:upleft){
+                    int previ = i + it[0];
+                    int prevj = j + it[1];
+                    int prevnode = previ*m + prevj;
+
+                    if(previ <0 || prevj<0 || previ>=n || prevj>=m){
+                        continue;
+                    }
+
+                    if(grid[previ][prevj] == 0){
+                        continue;
+                    }
+
+                    ds.unionbysize(newnode,prevnode);
+                }
+                
+                intialsize = max(intialsize,ds.findsize(newnode));
+            }
+        }
+        int result = intialsize;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1){
+                    continue;
+                }
+
+                int prevnode = i*m+j;
+
+                set<int> ultparent;
+
+                for(auto dir:directions){
+                    int newi = i + dir[0];
+                    int newj = j + dir[1];
+                    
+                    if(newi<0 || newj<0 || newi>=n || newj>=m){
+                        continue;
+                    }
+
+                    if(grid[newi][newj] == 0){
+                        continue;
+                    }
+
+                    int newnode= newi*m + newj;
+
+                    ultparent.insert(ds.findUpar(newnode));   
+                }
+
+                int landsize = 0;
+                for( auto it: ultparent){
+                    landsize += ds.findsize(it);
+                }
+
+                result=max(result,landsize+1);
+            }
+        }
+
+        return result;
+    }
+};
+
+
+
+
+
+
+
 
 int main() {
+
+
+    
     // LeetCode 1319: Number of Operations to Make Network Connected
     int n = 4;
     vector<vector<int>> connections = {
