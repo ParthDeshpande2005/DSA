@@ -392,6 +392,80 @@ public:
 
 
 
+//leetcode 947
+//I still don't understand this appoarch completely but that is fine lets see.really hard to understand even after watching the video.
+//IMP____. needed to watch video to find the answer. little bit complex.
+//here we need to connect all the nodes based on the row and the coloumn so lets see.
+//we use different parent array as compared to previous questions.
+//we use maxrow+maxcol as the length of the parent array .
+//we don't use the chess like parent array.
+class Stoneds{
+public:
+    vector<int> parent;
+    
+    Stoneds(int n){
+        parent.resize(n,0);
+        for(int i=0;i<n;i++){
+            parent[i] = i;
+        }
+    }
+
+    int findUpar(int node){
+        if(parent[node] == node) {
+            return node;
+        }
+
+        return parent[node] = findUpar(parent[node]);
+
+    }
+
+    void unionset(int newnode,int oldnode){
+        int ultnew = findUpar(newnode);
+        int ultold = findUpar(oldnode);
+
+        if(ultnew == ultold){
+            return;
+        }
+
+        parent[ultold]= ultnew;
+    }
+
+};
+class Solution {
+public:
+    int removeStones(vector<vector<int>>& stones) {
+        int n = stones.size();
+
+        int maxrow = 0;
+        int maxcol = 0;
+
+        for(auto it:stones){
+            maxrow = max(maxrow,it[0]);
+            maxcol = max(maxcol,it[1]);
+        }
+
+        Stoneds ds(maxrow+maxcol+2);
+        unordered_map<int,int> stoneNodes;
+        for(auto it:stones){
+            int noderow = it[0];
+            int nodecol = it[1] + maxrow+1;
+
+            ds.unionset(noderow,nodecol);
+            stoneNodes[noderow] = 1;
+            stoneNodes[nodecol] =1;
+        }
+
+        int cnt=0;
+        for(auto it:stoneNodes){
+            if(ds.findUpar(it.first) == it.first){
+                cnt++;
+            }
+
+        }
+
+        return n-cnt;
+    }
+};
 
 
 
