@@ -72,6 +72,71 @@ int kosaraju(int V, vector<int> adj[]){
 
 
 
+//leetcode 1192.Critical Connections in a Network.
+//Bridges in graph-->a connection that, if removed, will make some nodes unable to reach some other node.it will create a disjoint set.
+//we use striver method using low[] and time[] to solve this question.
+//time[] => dfs time of insertion
+//low[] => min lowest time insertions of all adjacent nodes apart from the parent.
+//apart form parent as we need to check if we can remove the parent to child edge.
+//as we dont consider the parent we can check if multiple path are present from the parent to the child node
+//if multiple path exist then it is not a bridge.
+//in this question we need to find all the bridges in graph.
+vector<vector<int>> result;
+int timer;
+vector<int> timez;
+vector<int> low;
+vector<int> visited;
+void bridge_dfs(int cur,int parent,vector<vector<int>>& adj){
+    visited[cur] = 1;
+
+    timez[cur] = low[cur] = timer;
+    timer++;
+
+    for(auto it:adj[cur]){
+        if(it == parent){
+            continue;
+        }
+        if(visited[it] == 1){ //if visted
+            low[cur] = min(low[cur],low[it]);
+        }
+        else{ //if not visited..
+            bridge_dfs(it,cur,adj);
+            low[cur] = min(low[cur],low[it]);
+
+            // can node--it be bridge??
+            if(low[it] > timez[cur]){
+                result.push_back({it,cur});
+            }
+        }
+    }
+}
+vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+
+    //make the adj list
+    vector<vector<int>> adj(n);
+    for(int i=0;i<connections.size();i++){
+        adj[connections[i][0]].push_back(connections[i][1]);
+        adj[connections[i][1]].push_back(connections[i][0]);
+    }
+
+    //init
+    int timer = 1;
+    timez.resize(n,-1);
+    low.resize(n,INT_MAX);
+    visited.resize(n,0);
+
+    //we will only call one dfs as the graph is connected.
+    //any node can reach other node directly or indirectly through the graph.
+
+    bridge_dfs(0,-1,adj);
+
+    return result;
+}
+
+
+
+
+
 
 
 int main(){
