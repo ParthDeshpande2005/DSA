@@ -120,6 +120,61 @@ int frogJumpdp_optimal(vector<int>& heights){
 }
 
 
+//Frog Jump K steps-->
+//striver--> 
+//recursive + memo
+int FJKrecursion(int ind, vector<int>& heights, vector<int>& dp,int K) {
+    if(ind == 0) return 0;
+
+    if(dp[ind] != -1) {
+        return dp[ind];
+    }
+
+    int ans = INT_MAX;
+    for(int i = 1;i<=K;i++){
+        if(ind-i >=0){
+            ans = min(ans,FJKrecursion(ind-i,heights,dp,K) + abs(heights[ind]-heights[ind-i]));
+        }
+        else{
+            break;
+        }
+    }
+
+    return dp[ind] = ans;
+}
+int frogJumprecursive_K(vector<int>& heights,int K) {
+    int nfj = heights.size();
+
+    vector<int> dp(nfj, -1);
+
+    return FJKrecursion(nfj-1, heights, dp,K);
+}
+//tabulation + dp + bottom up
+int frogJumpdp_K(vector<int>& heights,int K){
+    int n = heights.size();
+    
+    vector<int> dp(n,0);
+    dp[0] = 0;
+    for(int i=1;i<n;i++){
+        int ans = INT_MAX;
+        for(int j = 1;j<=K;j++){
+            if(i-j >= 0){
+                ans = min(ans,dp[i-j] + abs(heights[i]-heights[i-j]));
+            }
+            else{
+                break;
+            }
+        }
+
+        dp[i] = ans;
+    }
+    return dp[n-1];
+}
+//most optimal --> space optimization
+//not needed as we need to take the k size array and update it multiple times.
+//we can get the k = n and this will not change our space complexity at all.
+//we can use normal dp for this no need for space optimization.
+
 
 
 int main(){
