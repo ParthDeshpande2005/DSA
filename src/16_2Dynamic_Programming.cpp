@@ -176,6 +176,83 @@ int frogJumpdp_K(vector<int>& heights,int K){
 //we can use normal dp for this no need for space optimization.
 
 
+//leetcode 198.House Robber
+//Method 1 -> recursion and memoization
+int n;
+int recursion_rob(int cur,vector<int>& nums,vector<int>& memo){
+    if(cur >= n){
+        return 0;
+    }
+
+    if(memo[cur]!=-1){
+        return memo[cur];
+    }
+
+    //take 
+    int take = nums[cur] + recursion_rob(cur+2,nums,memo); //cur+2 as we can't pick just next element.
+
+    //pass
+    int pass = recursion_rob(cur+1,nums,memo);
+
+    return memo[cur]=max(take,pass);
+}
+int rob(vector<int>& nums) {
+    n = nums.size();
+    vector<int> memo(n,-1);
+
+    return recursion_rob(0,nums,memo);
+}
+//dp and tabulation solution
+int rob_dp(vector<int>& nums) {
+    int n = nums.size();
+
+    vector<int> dp(n,-1);
+    dp[0] = nums[0];
+
+    for(int i=1;i<n;i++){
+            
+        int take = nums[i];
+        if(i>1){
+            take += dp[i-2];
+        }
+            
+        //pass
+        int pass = 0 + dp[i-1];
+
+        dp[i] = max(pass,take);
+            
+    }
+
+    return dp[n-1];
+}
+//dp + space optimization
+int rob_optimal(vector<int>& nums) {
+    int n = nums.size();
+
+    int prev = nums[0];
+    int prev2 = 0;
+
+    for(int i=1;i<n;i++){
+        //take
+        int take = nums[i]+prev2;
+
+        //pass
+        int pass = prev;
+
+        prev2 = prev;
+        prev = max(take,pass);
+    }
+
+    return prev;
+}
+
+
+
+
+
+
+
+
 
 int main(){
 
