@@ -130,6 +130,176 @@ int maxProfit(vector<int>& prices) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//leetcode 714.Best time to buy and sell stock with transaction fee.
+//lets use recursion + memoization to solve this problem.
+//lets do the thing where i will subtart the stock when i buy it and add when i sell it.
+//this will reduce the size of the memoization table.
+//this appoarch is way better than keeping the price at which we brought the stock.
+vector<vector<int>> memo;
+int nfee;
+int recursive_profit(int ind,int buy,vector<int>& prices,int fee){
+    if(ind >= nfee){
+        return 0;
+    }
+
+    if(memo[ind][buy] != -1){
+        return memo[ind][buy];
+    }
+
+    int profit = 0;
+    if(buy == 0){ 
+        //take-->
+        int take = -prices[ind] + recursive_profit(ind+1,1,prices,fee);
+
+        //skip-->
+        int skip = recursive_profit(ind+1,0,prices,fee);
+
+        profit = max(take,skip);
+    }
+    //sell
+    else{ //if will apply the fee at the time of sell.
+        //take-->
+        int take = prices[ind] - fee + recursive_profit(ind+1,0,prices,fee);
+
+        //skip-->
+        int skip = recursive_profit(ind+1,1,prices,fee);
+
+        profit = max(take,skip);
+    }
+    
+    return memo[ind][buy] = profit;
+}
+int maxProfit_fee(vector<int>& prices, int fee) {
+    nfee = prices.size();
+    memo.resize(nfee+1,vector<int>(2,-1));
+    return recursive_profit(0,0,prices,fee);
+}
+//dp solution->
+int maxProfit_dp_fee(vector<int>& prices, int fee) {
+    int n = prices.size();
+
+    //creating dp -->
+    vector<vector<int>> dp(n+1,vector<int>(2,-1));
+
+    //initializing dp -->
+    dp[n][0] = 0;
+    dp[n][1] = 0;
+
+    for(int ind = n-1; ind >= 0; ind--){
+        for(int buy = 0; buy <= 1; buy++){
+            int profit = 0;
+            if(buy == 0){ 
+                //take-->
+                int take = -prices[ind] + dp[ind+1][1];
+
+                //skip-->
+                int skip = dp[ind+1][0];
+
+                profit = max(take,skip);
+            }
+            //sell
+            else{ //if will apply the fee at the time of sell.
+                //take-->
+                int take = prices[ind] - fee + dp[ind+1][0];
+
+                //skip-->
+                int skip = dp[ind+1][1];
+
+                profit = max(take,skip);
+            }
+
+            dp[ind][buy] = profit;
+        }
+    }
+
+    //returning ans--> 
+    //we return the dp at index = 0 and the buy value set to 0.
+    return dp[0][0];
+}
+//space optimized solution.
+int maxProfit_fee_optimal(vector<int>& prices, int fee) {
+    int n = prices.size();
+
+    //initializing -->
+    int next_skip = 0;
+    int next_buy = 0;
+
+    for(int ind = n-1; ind >= 0; ind--){
+        for(int buy = 0; buy <= 1; buy++){
+            int profit = 0;
+            if(buy == 0){ 
+                //take-->
+                int take = -prices[ind] + next_skip;
+
+                //skip-->
+                int skip = next_buy;
+
+                profit = max(take,skip);
+                next_buy = profit;
+            }
+            //sell
+            else{ //if will apply the fee at the time of sell.
+                //take-->
+                int take = prices[ind] - fee + next_buy;
+
+                //skip-->
+                int skip = next_skip;
+
+
+                profit = max(take,skip);
+                next_skip = profit;
+            }
+        }
+    }
+
+    //returning ans--> 
+    //we return the dp at index = 0 and the buy value set to 0.
+    return next_buy;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 int main(){
 
 
