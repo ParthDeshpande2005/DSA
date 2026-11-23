@@ -101,7 +101,7 @@ void PrintAllDivision(int n){
         //as the n might be updating some time so the n must also be changed with each loop. 
         if(n%i==0){
             answer.emplace_back(i);
-            if(n/i!=i) answer.emplace_back(n/i);
+            if(n/i!=i) answer.emplace_back(n/i); // we are adding two answer at the same time in the vector answer.this is optimal way to find all divisors.
         }   
     }   
     sort(answer.begin(),answer.end());

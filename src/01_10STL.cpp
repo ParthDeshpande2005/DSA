@@ -273,7 +273,7 @@ void explainSet(){
 
     //this is the syntax
     auto it5=st.lower_bound(2); //first element that is equal or greater than the target.
-    auto it6=st.upper_bound(3); //first element that is greater than strictly greater than the target.
+    auto it6=st.upper_bound(3); //first element that is strictly greater than the target.
   
 }
 

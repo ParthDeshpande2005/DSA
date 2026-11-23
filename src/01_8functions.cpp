@@ -75,11 +75,12 @@ int main(){
 
 
 //pass by reference in array
+//imp-->array is allways pass by reference and not pass by value.
 
 // void dosomething(int arr[],int n){
 //     arr[0]+=100;
 //     cout<<"value inside function: "<<arr[0]<<endl;
-// }//array is allways pass by reference and not pass by value.<--imp
+// }
 // //truely passing array by reference->void func(int (&arr)[5]){}
 // int main(){
 //     int n = 5;
